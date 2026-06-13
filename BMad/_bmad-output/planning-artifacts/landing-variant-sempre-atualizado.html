@@ -720,6 +720,85 @@
       font-weight: 900;
     }
 
+    .waitlist {
+      margin: 14px 0;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--paper);
+      padding: 22px;
+      box-shadow: var(--shadow-card);
+    }
+
+    .waitlist h2 {
+      font-family: Fraunces, Georgia, serif;
+      font-size: clamp(1.58rem, 2.8vw, 2.4rem);
+      letter-spacing: -0.02em;
+      margin-bottom: 8px;
+    }
+
+    .waitlist-form {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      align-items: stretch;
+      margin-top: 14px;
+    }
+
+    .waitlist-form input[type="email"] {
+      flex: 1 1 240px;
+      min-width: 0;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 12px 14px;
+      font: inherit;
+      color: var(--ink);
+      background: #fff;
+    }
+
+    .waitlist-form input[type="email"]:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(200, 85, 61, 0.15);
+    }
+
+    .waitlist-form .btn-primary {
+      flex: 0 0 auto;
+    }
+
+    .hp-field {
+      position: absolute;
+      left: -9999px;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+    }
+
+    .waitlist-note {
+      margin: 10px 0 0;
+      color: var(--muted);
+      font-size: 0.84rem;
+    }
+
+    .waitlist-success {
+      display: none;
+      margin-top: 12px;
+      border: 1px solid rgba(47, 107, 94, 0.3);
+      background: var(--trust-soft);
+      color: var(--trust-deep);
+      border-radius: 12px;
+      padding: 12px 14px;
+      font-weight: 800;
+    }
+
+    .waitlist.is-done .waitlist-form,
+    .waitlist.is-done .waitlist-note {
+      display: none;
+    }
+
+    .waitlist.is-done .waitlist-success {
+      display: block;
+    }
+
     @media (max-width: 980px) {
       .hero,
       .two-col,
@@ -774,6 +853,10 @@
       .hero-actions .btn {
         width: 100%;
         text-align: center;
+      }
+
+      .waitlist-form .btn-primary {
+        width: 100%;
       }
 
       .quote {
@@ -857,7 +940,7 @@
           <span class="new">R$ 297</span>
         </div>
         <p>Curso completo + comunidade + certificado por entrega do projeto final.</p>
-        <div class="spot-box">Últimas vagas desta onda liberadas agora.</div>
+        <div class="spot-box" data-spots-box>Apenas <strong data-spots>12</strong> vagas restantes nesta onda.</div>
         <div class="countdown-box">
           <span class="countdown-label">Oferta valida por</span>
           <span class="countdown-time" data-countdown-main>15:00</span>
@@ -1042,6 +1125,21 @@
       </details>
     </section>
 
+    <div class="section-break" aria-hidden="true"></div>
+
+    <section class="waitlist motion-reveal" id="lista">
+      <h2>Quer ser avisado na próxima abertura?</h2>
+      <p class="section-lead">Entre na lista de espera e receba um aviso assim que novas vagas ou uma nova janela promocional abrirem. Sem spam.</p>
+      <form name="lista-espera" method="POST" data-netlify="true" netlify-honeypot="bot-field" class="waitlist-form">
+        <input type="hidden" name="form-name" value="lista-espera" />
+        <p class="hp-field"><label>Não preencha isto: <input name="bot-field" /></label></p>
+        <input type="email" name="email" required placeholder="Seu melhor email" aria-label="Seu email" />
+        <button type="submit" class="btn btn-primary">Avise-me</button>
+      </form>
+      <p class="waitlist-note">Você entra na lista de espera. Avisamos por email quando abrir &mdash; nada de spam.</p>
+      <div class="waitlist-success" role="status">Pronto! Você está na lista. Vamos te avisar por email na próxima abertura.</div>
+    </section>
+
     <section class="final motion-reveal">
       <h2>Mantenha-se atualizado com critério e transforme tendencia em entrega.</h2>
       <p>Onda atual por R$ 297. Valor normal R$ 497. Últimas vagas.</p>
@@ -1092,12 +1190,16 @@
       const lockMs = LOCK_DAYS * 24 * 60 * 60 * 1000;
       const deadlineKey = "hfa_offer_deadline_v2";
       const lockKey = "hfa_offer_lock_v2";
+      const START_SPOTS = 12;
+      const MIN_SPOTS = 3;
 
       const inlineNode = document.querySelector("[data-countdown-inline]");
       const mainNode = document.querySelector("[data-countdown-main]");
       const finalNode = document.querySelector("[data-countdown-final]");
       const offerBox = document.querySelector(".offer");
       const ctaButton = document.querySelector(".offer .btn-primary");
+      const spotsNode = document.querySelector("[data-spots]");
+      const spotsBox = document.querySelector("[data-spots-box]");
       let timerId = null;
       let targetTime = null;
 
@@ -1117,12 +1219,22 @@
         return hours > 0 ? `${hh}:${mm}:${ss}` : `${mm}:${ss}`;
       }
 
+      function spotsFor(diff) {
+        const ratio = Math.max(0, Math.min(1, diff / durationMs));
+        return MIN_SPOTS + Math.round(ratio * (START_SPOTS - MIN_SPOTS));
+      }
+
       // Hide the promotional price and show the normal R$ 497 everywhere.
       function applyNormalPricing() {
         const newPrice = document.querySelector(".offer .new");
         const oldPrice = document.querySelector(".offer .old");
         if (newPrice) newPrice.textContent = "R$ 497";
         if (oldPrice) oldPrice.style.display = "none";
+        const heroCta = document.querySelector(".hero-actions .btn-primary");
+        if (heroCta) {
+          heroCta.textContent = "Entrar na lista de espera";
+          heroCta.setAttribute("href", "#lista");
+        }
         const waveChip = document.querySelector(".wave-chip");
         if (waveChip) {
           waveChip.innerHTML = 'Valor atual <strong>R$ 497</strong> &middot; nova janela promocional em breve';
@@ -1138,8 +1250,10 @@
         if (finalNode) finalNode.textContent = "00:00";
         if (ctaButton) {
           ctaButton.textContent = "Entrar na lista da próxima onda";
+          ctaButton.setAttribute("href", "#lista");
         }
         applyNormalPricing();
+        if (spotsBox) spotsBox.textContent = "Vagas desta janela esgotadas.";
         if (offerBox && !offerBox.querySelector("[data-lock-note]")) {
           const warning = document.createElement("p");
           warning.setAttribute("data-lock-note", "");
@@ -1170,6 +1284,7 @@
         if (mainNode) {
           mainNode.classList.toggle("is-urgent", diff <= 5 * 60 * 1000);
         }
+        if (spotsNode) spotsNode.textContent = String(spotsFor(diff));
       }
 
       const now = Date.now();
@@ -1237,6 +1352,25 @@
       window.addEventListener('load', syncScrollPad);
       setTimeout(syncScrollPad, 300);
       setTimeout(syncScrollPad, 1200);
+    })();
+
+    (function () {
+      const form = document.querySelector('.waitlist-form');
+      if (!form) return;
+      const wrap = form.closest('.waitlist');
+      form.addEventListener('submit', function (e) {
+        e.preventDefault();
+        const body = new URLSearchParams(new FormData(form)).toString();
+        fetch(window.location.pathname, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+          body: body
+        }).then(function () {
+          if (wrap) wrap.classList.add('is-done');
+        }).catch(function () {
+          form.submit();
+        });
+      });
     })();
   </script>
 </body>
