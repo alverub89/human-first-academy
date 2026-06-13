@@ -1,0 +1,7 @@
+[build]
+  publish = "BMad/_bmad-output/planning-artifacts"
+
+[[redirects]]
+  from = "/"
+  to = "/pm-ai-kickstart-landing-preview.html"
+  status = 302
