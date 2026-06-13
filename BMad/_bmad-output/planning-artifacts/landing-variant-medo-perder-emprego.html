@@ -912,6 +912,17 @@
   </main>
   <script>
     (function () {
+      if ('scrollRestoration' in history) {
+        history.scrollRestoration = 'manual';
+      }
+      window.addEventListener('load', function () {
+        if (!window.location.hash) {
+          window.scrollTo(0, 0);
+        }
+      });
+    })();
+
+    (function () {
       const durationMs = 15 * 60 * 1000;
       const storageKey = "hfa_offer_15min_deadline_v1";
       const now = Date.now();
