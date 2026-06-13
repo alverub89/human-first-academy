@@ -1073,6 +1073,132 @@
 
     .ba-after ul { color: #2f4a43; }
 
+    .hero-gains {
+      list-style: none;
+      margin: 16px 0 0;
+      padding: 0;
+      display: grid;
+      gap: 8px;
+    }
+
+    .hero-gains li {
+      position: relative;
+      padding-left: 28px;
+      font-weight: 600;
+      color: var(--ink);
+    }
+
+    .hero-gains li::before {
+      content: "\2192";
+      position: absolute;
+      left: 0;
+      top: 0;
+      color: var(--accent);
+      font-weight: 900;
+    }
+
+    .hero-gains strong { color: var(--accent-dark); }
+
+    .intro-author {
+      margin-top: 6px;
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+      background: linear-gradient(90deg, #fefaf7, #fffdfb);
+    }
+
+    .intro-author-inner {
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: 14px 20px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .intro-author img {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid #fff;
+      box-shadow: var(--shadow-card);
+      flex: 0 0 auto;
+    }
+
+    .intro-author-text { display: grid; gap: 2px; }
+    .intro-author-name { font-weight: 800; color: var(--ink); }
+    .intro-author-role { color: var(--muted); font-size: 0.9rem; }
+
+    .intro-author-creds {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-left: auto;
+    }
+
+    .intro-cred {
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: #fff;
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--muted);
+      padding: 6px 12px;
+    }
+
+    .intro-cred strong { color: var(--ink); }
+
+    .includes {
+      list-style: none;
+      margin: 10px 0 0;
+      padding: 0;
+      display: grid;
+      gap: 6px;
+    }
+
+    .includes li {
+      position: relative;
+      padding-left: 24px;
+      font-size: 0.88rem;
+      color: var(--muted);
+    }
+
+    .includes li::before {
+      content: "\2713";
+      position: absolute;
+      left: 0;
+      top: 0;
+      color: var(--trust);
+      font-weight: 900;
+    }
+
+    .metrics {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .metric {
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: #fff;
+      padding: 16px;
+    }
+
+    .metric-row { display: flex; align-items: center; gap: 12px; }
+    .metric-before, .metric-after { display: grid; gap: 2px; }
+    .m-tag { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--muted); font-weight: 800; }
+    .metric-before .m-val { color: #8f3c26; text-decoration: line-through; font-weight: 800; }
+    .metric-after .m-val { color: var(--trust-deep); font-weight: 900; font-size: 1.3rem; }
+    .metric-arrow { color: var(--accent); font-weight: 900; font-size: 1.2rem; }
+    .metric-label { margin-top: 10px; color: var(--muted); font-size: 0.9rem; font-weight: 700; }
+
+    @media (max-width: 760px) {
+      .intro-author-creds { margin-left: 0; width: 100%; }
+    }
+
     @media (max-width: 980px) {
       .hero,
       .two-col,
@@ -1184,7 +1310,7 @@
   <div class="topbar">
     <div class="topbar-inner">
       <div class="wave-chip">Valor normal <strong>R$ 497</strong> | Onda atual <strong>R$ 297</strong> | Oferta valida por <span class="count-inline" data-countdown-inline>15:00</span></div>
-      <a class="btn btn-primary" href="#checkout">Garantir vaga nesta onda</a>
+      <a class="btn btn-primary" href="#checkout">Quero minha vaga nesta onda</a>
     </div>
   </div>
 
@@ -1195,9 +1321,15 @@
         <h1>Seu cargo de Product não esta em risco por causa da IA. Ele esta em risco se você não souber aplicar IA com critério.</h1>
         <p class="sub">Em ~10 horas, você aprende a transformar IA em backlog real, comunicação clara e decisão melhor de produto. Sem programar.</p>
 
+        <ul class="hero-gains">
+          <li>Specs em <strong>horas</strong>, não em dias</li>
+          <li><strong>Discovery multiplicado</strong> com apoio de IA</li>
+          <li><strong>Menos trabalho operacional</strong>, mais decisão de produto</li>
+        </ul>
+
         <div class="hero-actions">
           <a class="btn btn-primary" href="#checkout">Quero me tornar indispensavel com IA</a>
-          <a class="btn btn-ghost" href="#ementa">Ver ementa completa</a>
+          <a class="btn btn-ghost" href="#ementa">Ver o método completo</a>
         </div>
 
         <div class="format-row">
@@ -1222,6 +1354,13 @@
           <span class="new">R$ 297</span>
         </div>
         <p>Curso completo + comunidade + certificado por entrega do projeto final.</p>
+        <ul class="includes">
+          <li>14 aulas práticas (8&ndash;20 min)</li>
+          <li>Frameworks e fluxos prontos para usar</li>
+          <li>Comunidade fechada de PMs</li>
+          <li>Projeto final + certificado</li>
+          <li>12 meses de acesso com atualizações</li>
+        </ul>
         <div class="spot-box" data-spots-box>Apenas <strong data-spots>12</strong> vagas restantes nesta onda.</div>
         <div class="countdown-box">
           <span class="countdown-label">Oferta valida por</span>
@@ -1236,15 +1375,18 @@
       </aside>
     </section>
 
-    <section class="authority" aria-label="Credenciais do instrutor">
-      <div class="authority-inner">
-        <span class="authority-item"><strong>~20 anos</strong> em tecnologia e produto</span>
-        <span class="authority-sep" aria-hidden="true"></span>
-        <span class="authority-item">Liderou plataformas digitais para <strong>milhões de usuários</strong></span>
-        <span class="authority-sep" aria-hidden="true"></span>
-        <span class="authority-item">Aplica <strong>IA em produto</strong> no dia a dia</span>
-        <span class="authority-sep" aria-hidden="true"></span>
-        <span class="authority-item">Criador da <strong>Cida</strong>, plataforma de carreira com IA</span>
+    <section class="intro-author" aria-label="Quem conduz">
+      <div class="intro-author-inner">
+        <img src="./assets/instructor-portrait.webp.png" alt="Rubão Alves" loading="lazy" />
+        <div class="intro-author-text">
+          <span class="intro-author-name">Conduzido por Rubão Alves</span>
+          <span class="intro-author-role">Líder de produto &amp; tecnologia &middot; criador da Cida (carreira com IA)</span>
+        </div>
+        <div class="intro-author-creds">
+          <span class="intro-cred"><strong>~20 anos</strong> em tech e produto</span>
+          <span class="intro-cred">Produtos para <strong>milhões</strong> de usuários</span>
+          <span class="intro-cred">Aplica <strong>IA em produto</strong> diariamente</span>
+        </div>
       </div>
     </section>
 
@@ -1278,31 +1420,32 @@
     <div class="section-break" aria-hidden="true"></div>
 
     <section class="section motion-reveal" id="ementa">
-      <h2>Ementa com ritmo de execucao</h2>
+      <h2>O método Hype &rarr; Backlog</h2>
+      <p class="section-lead">Um sistema em 4 fases para sair do hype de IA e chegar a backlog aplicável &mdash; com critério e no seu contexto.</p>
       <div class="program">
         <article class="module motion-reveal motion-delay-1">
-          <h3>Modulo 1 - Fundamentos para PM</h3>
+          <h3>Fase 1 &middot; Fundamentos para PM</h3>
           <ul>
             <li>LLMs, agentes, RAG e limites da IA em linguagem de produto</li>
             <li>Como evitar erro de contexto e resposta generica</li>
           </ul>
         </article>
         <article class="module motion-reveal motion-delay-2">
-          <h3>Modulo 2 - Do caos ao backlog</h3>
+          <h3>Fase 2 &middot; Do caos ao backlog</h3>
           <ul>
             <li>Estrutura de prompt profissional para produto</li>
             <li>Loop gerar, criticar e refinar com critério</li>
           </ul>
         </article>
         <article class="module motion-reveal motion-delay-1">
-          <h3>Modulo 3 - Fluxos diarios do PM</h3>
+          <h3>Fase 3 &middot; Fluxos diários do PM</h3>
           <ul>
             <li>Discovery, sintese de feedback e comunicação com stakeholders</li>
             <li>Criterios de aceite com edge cases para reduzir retrabalho</li>
           </ul>
         </article>
         <article class="module motion-reveal motion-delay-2">
-          <h3>Modulo 4 - Spec e impacto</h3>
+          <h3>Fase 4 &middot; Spec e impacto</h3>
           <ul>
             <li>Menos ambiguidade, mais qualidade de entrega</li>
             <li>Projeto final com backlog real do seu contexto</li>
@@ -1444,6 +1587,7 @@
 
     <section class="section motion-reveal">
       <h2>Prova de aplicação em contexto real</h2>
+      <div class="metrics" data-metrics hidden></div>
       <div class="proof-grid">
         <article class="quote motion-reveal motion-delay-1">
           "Eu achava que IA ia reduzir meu espaco no time. Depois do curso, virei referencia para organizar backlog e comunicar melhor as decisoes."
@@ -1840,6 +1984,31 @@
       const next = section.querySelector('[data-vc-next]');
       if (prev) prev.addEventListener('click', function () { scrollByCards(-1); });
       if (next) next.addEventListener('click', function () { scrollByCards(1); });
+    })();
+
+    (function () {
+      // === EDITE AQUI: resultados reais (antes/depois) ===
+      // Preencha com números verificáveis. Vazio = a faixa fica oculta.
+      const metrics = [
+        // { label: "Tempo para uma spec de produto", before: "6 horas", after: "1 hora" },
+        // { label: "Tickets refinados por sprint", before: "20", after: "60" },
+        // { label: "Entrevistas sintetizadas", before: "1 por dia", after: "5 por dia" },
+      ];
+      const box = document.querySelector('[data-metrics]');
+      if (!box || !metrics.length) return;
+      metrics.forEach(function (m) {
+        const el = document.createElement('div');
+        el.className = 'metric';
+        el.innerHTML =
+          '<div class="metric-row">' +
+            '<div class="metric-before"><span class="m-tag">Antes</span><span class="m-val">' + m.before + '</span></div>' +
+            '<span class="metric-arrow">&rarr;</span>' +
+            '<div class="metric-after"><span class="m-tag">Depois</span><span class="m-val">' + m.after + '</span></div>' +
+          '</div>' +
+          '<div class="metric-label">' + (m.label || '') + '</div>';
+        box.appendChild(el);
+      });
+      box.hidden = false;
     })();
   </script>
 </body>
