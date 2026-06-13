@@ -1022,9 +1022,32 @@
       if ('scrollRestoration' in history) {
         history.scrollRestoration = 'manual';
       }
+
+      let userScrolled = false;
+      const markScrolled = function () { userScrolled = true; };
+      window.addEventListener('wheel', markScrolled, { passive: true });
+      window.addEventListener('touchmove', markScrolled, { passive: true });
+      window.addEventListener('keydown', function (e) {
+        const keys = ['ArrowDown', 'ArrowUp', 'PageDown', 'PageUp', 'Home', 'End', ' '];
+        if (keys.indexOf(e.key) !== -1) markScrolled();
+      });
+
+      function toTop() {
+        if (!userScrolled) window.scrollTo(0, 0);
+      }
+
+      // Force start at the very top, overriding restored scroll / URL hash.
+      toTop();
+      document.addEventListener('DOMContentLoaded', toTop);
       window.addEventListener('load', function () {
-        if (!window.location.hash) {
-          window.scrollTo(0, 0);
+        toTop();
+        setTimeout(toTop, 80);
+        setTimeout(toTop, 350);
+      });
+      window.addEventListener('pageshow', function (e) {
+        if (e.persisted) {
+          userScrolled = false;
+          toTop();
         }
       });
     })();
