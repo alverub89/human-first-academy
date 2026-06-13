@@ -1993,7 +1993,7 @@
       const metrics = [
         { label: "Itens de backlog refinados por sprint", before: "~20", after: "~40" },
         { label: "Tempo para a 1ª versão de uma spec", before: "1 dia", after: "meio dia" },
-        { label: "Sínteses de discovery por semana", before: "2", after: "4" },
+        { label: "Ciclo de discovery de produto", before: "meses", after: "dias" },
       ];
       const box = document.querySelector('[data-metrics]');
       if (!box || !metrics.length) return;
@@ -2011,7 +2011,7 @@
       });
       const note = document.createElement('p');
       note.className = 'metric-note';
-      note.textContent = 'Ganhos de produtividade observados no time do instrutor aplicando IA no fluxo de produto (cerca de 2x).';
+      note.textContent = 'Ganhos observados no time do instrutor aplicando IA no fluxo de produto.';
       box.appendChild(note);
       box.hidden = false;
     })();
