@@ -29,6 +29,7 @@
 
     html {
       scroll-behavior: smooth;
+      scroll-padding-top: 96px;
     }
 
     body {
@@ -660,17 +661,21 @@
       }
 
       .topbar-inner {
-        padding: 10px 16px;
+        padding: 8px 16px;
+        gap: 8px;
       }
 
       .topbar-inner .btn-primary {
         width: 100%;
         text-align: center;
+        padding: 10px 16px;
       }
 
       .wave-chip {
         width: 100%;
         text-align: center;
+        font-size: 0.78rem;
+        padding: 6px 10px;
       }
 
       .hero-stats,
@@ -996,6 +1001,20 @@
       );
 
       nodes.forEach((node) => observer.observe(node));
+    })();
+
+    (function () {
+      const topbar = document.querySelector('.topbar');
+      if (!topbar) return;
+      function syncScrollPad() {
+        const h = topbar.offsetHeight || 0;
+        document.documentElement.style.scrollPaddingTop = (h + 14) + 'px';
+      }
+      syncScrollPad();
+      window.addEventListener('resize', syncScrollPad);
+      window.addEventListener('load', syncScrollPad);
+      setTimeout(syncScrollPad, 300);
+      setTimeout(syncScrollPad, 1200);
     })();
   </script>
 </body>
