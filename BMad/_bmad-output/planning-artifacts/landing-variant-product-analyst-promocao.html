@@ -1086,15 +1086,12 @@
     })();
 
     (function () {
+      // Once the flash window ends, the promo price is hidden for this many days.
+      const LOCK_DAYS = 3;
       const durationMs = 15 * 60 * 1000;
-      const storageKey = "hfa_offer_15min_deadline_v1";
-      const now = Date.now();
-      let targetTime = Number(localStorage.getItem(storageKey));
-
-      if (!Number.isFinite(targetTime) || targetTime <= now) {
-        targetTime = now + durationMs;
-        localStorage.setItem(storageKey, String(targetTime));
-      }
+      const lockMs = LOCK_DAYS * 24 * 60 * 60 * 1000;
+      const deadlineKey = "hfa_offer_deadline_v2";
+      const lockKey = "hfa_offer_lock_v2";
 
       const inlineNode = document.querySelector("[data-countdown-inline]");
       const mainNode = document.querySelector("[data-countdown-main]");
@@ -1102,6 +1099,12 @@
       const offerBox = document.querySelector(".offer");
       const ctaButton = document.querySelector(".offer .btn-primary");
       let timerId = null;
+      let targetTime = null;
+
+      function read(key) {
+        const v = Number(localStorage.getItem(key));
+        return Number.isFinite(v) ? v : null;
+      }
 
       function formatRemaining(ms) {
         const totalSeconds = Math.floor(ms / 1000);
@@ -1114,29 +1117,49 @@
         return hours > 0 ? `${hh}:${mm}:${ss}` : `${mm}:${ss}`;
       }
 
+      // Hide the promotional price and show the normal R$ 497 everywhere.
+      function applyNormalPricing() {
+        const newPrice = document.querySelector(".offer .new");
+        const oldPrice = document.querySelector(".offer .old");
+        if (newPrice) newPrice.textContent = "R$ 497";
+        if (oldPrice) oldPrice.style.display = "none";
+        const waveChip = document.querySelector(".wave-chip");
+        if (waveChip) {
+          waveChip.innerHTML = 'Valor atual <strong>R$ 497</strong> &middot; nova janela promocional em breve';
+        }
+        const finalLead = document.querySelector(".final p");
+        if (finalLead) {
+          finalLead.textContent = "Janela promocional encerrada. Valor atual R$ 497. Aguarde a próxima abertura.";
+        }
+      }
+
       function renderExpired() {
-        const msg = "Oferta relâmpago encerrada";
-        if (inlineNode) inlineNode.textContent = msg;
-        if (mainNode) mainNode.textContent = msg;
+        if (mainNode) mainNode.textContent = "Oferta relâmpago encerrada";
         if (finalNode) finalNode.textContent = "00:00";
         if (ctaButton) {
           ctaButton.textContent = "Entrar na lista da próxima onda";
         }
-        if (offerBox) {
+        applyNormalPricing();
+        if (offerBox && !offerBox.querySelector("[data-lock-note]")) {
           const warning = document.createElement("p");
+          warning.setAttribute("data-lock-note", "");
           warning.style.marginTop = "10px";
           warning.style.fontWeight = "800";
           warning.style.color = "#6d2b1c";
-          warning.textContent = "As últimas vagas desta janela acabaram. Entre na próxima abertura da oferta.";
+          warning.textContent = "Você já abriu esta janela promocional. O valor volta a R$ 297 apenas na próxima abertura.";
           offerBox.appendChild(warning);
         }
       }
 
+      function lockNow() {
+        localStorage.setItem(lockKey, String(Date.now() + lockMs));
+      }
+
       function tick() {
-        const now = Date.now();
-        const diff = targetTime - now;
+        const diff = targetTime - Date.now();
         if (diff <= 0) {
           if (timerId) clearInterval(timerId);
+          lockNow();
           renderExpired();
           return;
         }
@@ -1144,13 +1167,38 @@
         if (inlineNode) inlineNode.textContent = text;
         if (mainNode) mainNode.textContent = text;
         if (finalNode) finalNode.textContent = text;
-
         if (mainNode) {
-          const urgent = diff <= 5 * 60 * 1000;
-          mainNode.classList.toggle("is-urgent", urgent);
+          mainNode.classList.toggle("is-urgent", diff <= 5 * 60 * 1000);
         }
       }
 
+      const now = Date.now();
+      const lockUntil = read(lockKey);
+
+      // Still inside the lock window -> keep the promo hidden, no countdown.
+      if (lockUntil !== null && lockUntil > now) {
+        renderExpired();
+        return;
+      }
+
+      // Lock has elapsed -> reopen a fresh promotional window.
+      if (lockUntil !== null) {
+        localStorage.removeItem(lockKey);
+        localStorage.removeItem(deadlineKey);
+      }
+
+      let deadline = read(deadlineKey);
+      if (deadline === null) {
+        deadline = now + durationMs;
+        localStorage.setItem(deadlineKey, String(deadline));
+      } else if (deadline <= now) {
+        // The 15-min window already elapsed (left and came back) -> lock the promo.
+        lockNow();
+        renderExpired();
+        return;
+      }
+
+      targetTime = deadline;
       tick();
       timerId = setInterval(tick, 1000);
     })();
