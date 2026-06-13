@@ -1245,6 +1245,49 @@
       .flow-step { flex-basis: 100%; }
     }
 
+    .hero-format {
+      margin: 8px 0 0;
+      font-size: 0.84rem;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: var(--accent-dark);
+    }
+
+    .hero-visual {
+      width: 100%;
+      border-radius: 16px;
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow-card);
+      margin-bottom: 14px;
+      display: block;
+      aspect-ratio: 16 / 10;
+      object-fit: cover;
+    }
+
+    .onda-ladder {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 6px;
+      margin: 6px 0 4px;
+    }
+
+    .onda {
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: #fff;
+      padding: 8px;
+      text-align: center;
+      display: grid;
+      gap: 2px;
+    }
+
+    .onda-name { font-size: 0.66rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.03em; color: var(--muted); }
+    .onda-price { font-weight: 900; color: var(--ink); }
+    .onda.is-current { border-color: var(--accent); background: #fff3ee; }
+    .onda.is-current .onda-price { color: var(--accent); }
+    .offer .onda-note { margin-top: 2px; font-size: 0.8rem; color: var(--muted); }
+
     @media (max-width: 980px) {
       .hero,
       .two-col,
@@ -1355,7 +1398,7 @@
 <body>
   <div class="topbar">
     <div class="topbar-inner">
-      <div class="wave-chip">Valor normal <strong>R$ 497</strong> | Onda atual <strong>R$ 297</strong> | Oferta valida por <span class="count-inline" data-countdown-inline>15:00</span></div>
+      <div class="wave-chip">Valor normal <strong>R$ 497</strong> | Onda atual <strong>R$ 297</strong> | Onda 1 encerra em <span class="count-inline" data-countdown-inline>2d 00h 00m</span></div>
       <a class="btn btn-primary" href="#checkout">Quero minha vaga nesta onda</a>
     </div>
   </div>
@@ -1364,6 +1407,7 @@
     <section class="hero">
       <div class="hero-left">
         <span class="eyebrow">IA para PMs: do hype ao backlog</span>
+        <p class="hero-format">Curso on-demand &middot; comece hoje &middot; 12 meses de acesso</p>
         <h1>Atualizacao de verdade não e consumir novidade. E saber aplicar o que importa no trabalho real.</h1>
         <ul class="hero-gains">
           <li>Specs em <strong>horas</strong>, não em dias</li>
@@ -1393,13 +1437,21 @@
         </div>
       </div>
 
-      <aside class="offer hero-right" id="checkout">
+      <div class="hero-right">
+        <img class="hero-visual" src="./assets/hero-pm-ai-premium.webp.png" alt="Backlog e contexto de produto na prática" loading="eager" />
+        <aside class="offer" id="checkout">
         <span class="pill">Onda 1 de validação</span>
         <h3 style="margin-top:10px;">Oferta desta onda</h3>
         <div class="price-row">
           <span class="old">R$ 497</span>
           <span class="new">R$ 297</span>
         </div>
+        <div class="onda-ladder" aria-label="Ondas de preço">
+          <div class="onda is-current"><span class="onda-name">Onda 1 &middot; agora</span><span class="onda-price">R$ 297</span></div>
+          <div class="onda"><span class="onda-name">Onda 2</span><span class="onda-price">R$ 397</span></div>
+          <div class="onda"><span class="onda-name">Valor cheio</span><span class="onda-price">R$ 497</span></div>
+        </div>
+        <p class="onda-note">O preço sobe a cada onda. Você está na Onda 1.</p>
         <p>Curso completo + comunidade + certificado por entrega do projeto final.</p>
         <ul class="includes">
           <li>14 aulas práticas (8&ndash;20 min)</li>
@@ -1410,16 +1462,17 @@
         </ul>
         <div class="spot-box" data-spots-box>Apenas <strong data-spots>12</strong> vagas restantes nesta onda.</div>
         <div class="countdown-box">
-          <span class="countdown-label">Oferta valida por</span>
-          <span class="countdown-time" data-countdown-main>15:00</span>
+          <span class="countdown-label">Onda 1 encerra em</span>
+          <span class="countdown-time" data-countdown-main>2d 00h 00m</span>
         </div>
-        <p>Ao terminar o tempo, esta condicao de entrada expira e volta para o valor normal.</p>
+        <p>Ao encerrar a Onda 1, o preço sobe para a próxima onda.</p>
         <div style="margin-top:12px; display:grid; gap:8px;">
           <a class="btn btn-primary" href="#" style="text-align:center;">Quero me manter atualizado com critério</a>
-          <span style="font-size:0.84rem; color:var(--muted);">Oferta relâmpago de 15 minutos + últimas vagas</span>
+          <span style="font-size:0.84rem; color:var(--muted);">Preço da Onda 1 &middot; vagas limitadas</span>
         </div>
         <div class="guarantee"><span class="guarantee-ic" aria-hidden="true">&#10003;</span> Garantia incondicional de 7 dias. Risco zero.</div>
-      </aside>
+        </aside>
+      </div>
     </section>
 
     <section class="intro-author" aria-label="Quem conduz">
@@ -1718,6 +1771,18 @@
         <summary>E se eu não gostar?</summary>
         <p>Você tem garantia incondicional de 7 dias.</p>
       </details>
+      <details>
+        <summary>É gravado? Posso assistir quando quiser?</summary>
+        <p>Sim. O curso é 100% on-demand: você assiste no seu ritmo, quantas vezes quiser, por 12 meses.</p>
+      </details>
+      <details>
+        <summary>Como recebo o acesso?</summary>
+        <p>Logo após a confirmação do pagamento, você recebe por email o acesso à plataforma e à comunidade.</p>
+      </details>
+      <details>
+        <summary>Preciso de alguma ferramenta de IA paga?</summary>
+        <p>Não é obrigatório. Você consegue aplicar tudo com as versões gratuitas; se já tiver uma ferramenta paga, melhor ainda.</p>
+      </details>
     </section>
 
     <div class="section-break" aria-hidden="true"></div>
@@ -1736,11 +1801,11 @@
     </section>
 
     <section class="final motion-reveal">
-      <h2>Mantenha-se atualizado com critério e transforme tendencia em entrega.</h2>
+      <h2>Dobre sua entrega de produto sem dobrar suas reuniões.</h2>
       <p>Onda atual por R$ 297. Valor normal R$ 497. Últimas vagas.</p>
-      <div class="final-timer" data-countdown-final>15:00</div>
+      <div class="final-timer" data-countdown-final>2d 00h 00m</div>
       <a class="btn btn-primary" href="#checkout">Quero me manter atualizado com critério</a>
-      <div style="margin-top:10px;"><small>Oferta valida por 15 minutos | últimas vagas | 12 meses de acesso</small></div>
+      <div style="margin-top:10px;"><small>Preço da Onda 1 &middot; sobe na próxima onda &middot; 12 meses de acesso</small></div>
     </section>
   </main>
   <script>
@@ -1781,7 +1846,7 @@
     (function () {
       // Once the flash window ends, the promo price is hidden for this many days.
       const LOCK_DAYS = 3;
-      const durationMs = 15 * 60 * 1000;
+      const durationMs = 2 * 24 * 60 * 60 * 1000;
       const lockMs = LOCK_DAYS * 24 * 60 * 60 * 1000;
       const deadlineKey = "hfa_offer_deadline_v2";
       const lockKey = "hfa_offer_lock_v2";
@@ -1805,13 +1870,14 @@
 
       function formatRemaining(ms) {
         const totalSeconds = Math.floor(ms / 1000);
-        const hours = Math.floor(totalSeconds / 3600);
+        const days = Math.floor(totalSeconds / 86400);
+        const hours = Math.floor((totalSeconds % 86400) / 3600);
         const minutes = Math.floor((totalSeconds % 3600) / 60);
         const seconds = totalSeconds % 60;
-        const hh = String(hours).padStart(2, "0");
-        const mm = String(minutes).padStart(2, "0");
-        const ss = String(seconds).padStart(2, "0");
-        return hours > 0 ? `${hh}:${mm}:${ss}` : `${mm}:${ss}`;
+        const pad = function (n) { return String(n).padStart(2, "0"); };
+        if (days > 0) return days + "d " + pad(hours) + "h " + pad(minutes) + "m";
+        if (hours > 0) return pad(hours) + ":" + pad(minutes) + ":" + pad(seconds);
+        return pad(minutes) + ":" + pad(seconds);
       }
 
       function spotsFor(diff) {
@@ -1823,7 +1889,7 @@
       function applyNormalPricing() {
         const newPrice = document.querySelector(".offer .new");
         const oldPrice = document.querySelector(".offer .old");
-        if (newPrice) newPrice.textContent = "R$ 497";
+        if (newPrice) newPrice.textContent = "R$ 397";
         if (oldPrice) oldPrice.style.display = "none";
         const heroCta = document.querySelector(".hero-actions .btn-primary");
         if (heroCta) {
@@ -1832,16 +1898,16 @@
         }
         const waveChip = document.querySelector(".wave-chip");
         if (waveChip) {
-          waveChip.innerHTML = 'Valor atual <strong>R$ 497</strong> &middot; nova janela promocional em breve';
+          waveChip.innerHTML = 'Onda 2 &middot; <strong>R$ 397</strong> &middot; o preço subiu';
         }
         const finalLead = document.querySelector(".final p");
         if (finalLead) {
-          finalLead.textContent = "Janela promocional encerrada. Valor atual R$ 497. Aguarde a próxima abertura.";
+          finalLead.textContent = "Onda 1 encerrada. O preço atual é o da Onda 2: R$ 397.";
         }
       }
 
       function renderExpired() {
-        if (mainNode) mainNode.textContent = "Oferta relâmpago encerrada";
+        if (mainNode) mainNode.textContent = "Onda 1 encerrada";
         if (finalNode) finalNode.textContent = "00:00";
         if (ctaButton) {
           ctaButton.textContent = "Entrar na lista da próxima onda";
@@ -1855,7 +1921,7 @@
           warning.style.marginTop = "10px";
           warning.style.fontWeight = "800";
           warning.style.color = "#6d2b1c";
-          warning.textContent = "Você já abriu esta janela promocional. O valor volta a R$ 297 apenas na próxima abertura.";
+          warning.textContent = "A Onda 1 encerrou para você. O preço de R$ 297 não volta — agora vale o da próxima onda.";
           offerBox.appendChild(warning);
         }
       }
