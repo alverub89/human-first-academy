@@ -799,6 +799,123 @@
       display: block;
     }
 
+    .video-carousel .vc-track {
+      display: flex;
+      gap: 14px;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+      padding-bottom: 4px;
+    }
+
+    .video-carousel .vc-track::-webkit-scrollbar {
+      display: none;
+    }
+
+    .vc-slide {
+      flex: 0 0 calc(50% - 7px);
+      scroll-snap-align: start;
+    }
+
+    .vc-frame {
+      position: relative;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      overflow: hidden;
+      background: #000;
+      aspect-ratio: 16 / 9;
+      cursor: pointer;
+    }
+
+    .vc-frame img,
+    .vc-frame iframe {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      border: 0;
+      object-fit: cover;
+      display: block;
+    }
+
+    .vc-overlay {
+      position: absolute;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(180deg, rgba(0, 0, 0, 0.05), rgba(0, 0, 0, 0.4));
+      transition: background 0.2s ease;
+    }
+
+    .vc-frame:hover .vc-overlay {
+      background: linear-gradient(180deg, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.5));
+    }
+
+    .vc-playbtn {
+      width: 62px;
+      height: 62px;
+      border-radius: 50%;
+      background: rgba(200, 85, 61, 0.94);
+      box-shadow: 0 10px 24px rgba(0, 0, 0, 0.3);
+      display: grid;
+      place-items: center;
+      transition: transform 0.2s ease;
+    }
+
+    .vc-frame:hover .vc-playbtn {
+      transform: scale(1.08);
+    }
+
+    .vc-playbtn::before {
+      content: "";
+      width: 0;
+      height: 0;
+      border-left: 18px solid #fff;
+      border-top: 11px solid transparent;
+      border-bottom: 11px solid transparent;
+      margin-left: 4px;
+    }
+
+    .vc-title {
+      margin: 8px 0 0;
+      font-weight: 700;
+      color: var(--ink);
+      font-size: 0.95rem;
+    }
+
+    .vc-nav {
+      display: flex;
+      gap: 8px;
+      justify-content: flex-end;
+      margin-top: 12px;
+    }
+
+    .vc-nav button {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      border: 1px solid var(--line);
+      background: #fff;
+      color: var(--ink);
+      cursor: pointer;
+      font-size: 1.15rem;
+      display: grid;
+      place-items: center;
+      transition: background 0.15s ease, transform 0.15s ease;
+    }
+
+    .vc-nav button:hover {
+      background: var(--soft);
+      transform: translateY(-1px);
+    }
+
+    @media (max-width: 720px) {
+      .vc-slide {
+        flex-basis: 100%;
+      }
+    }
+
     @media (max-width: 980px) {
       .hero,
       .two-col,
@@ -1105,6 +1222,18 @@
 
     <div class="section-break" aria-hidden="true"></div>
 
+    <section class="section video-carousel motion-reveal" id="videos" hidden>
+      <h2>Veja na prática</h2>
+      <p class="section-lead">Alguns vídeos para você sentir o tom, a didática e o que esperar do curso.</p>
+      <div class="vc-track" data-vc-track></div>
+      <div class="vc-nav">
+        <button type="button" data-vc-prev aria-label="Vídeo anterior">&#8592;</button>
+        <button type="button" data-vc-next aria-label="Próximo vídeo">&#8594;</button>
+      </div>
+    </section>
+
+    <div class="section-break" aria-hidden="true"></div>
+
     <section class="section faq motion-reveal">
       <h2>Perguntas antes da compra</h2>
       <details>
@@ -1376,6 +1505,71 @@
           form.submit();
         });
       });
+    })();
+
+    (function () {
+      // === EDITE AQUI: seus vídeos do YouTube ===
+      // Para cada vídeo use o ID (o trecho depois de "v=" ou "youtu.be/").
+      // Ex.: https://youtu.be/dQw4w9WgXcQ  ->  { id: "dQw4w9WgXcQ", title: "..." }
+      const videos = [
+        { id: "r_N3nX4jhi8" },
+        { id: "JA2pfHvcYow" },
+        { id: "VsdgguW2EoQ" },
+      ];
+
+      const section = document.querySelector('#videos');
+      const track = section ? section.querySelector('[data-vc-track]') : null;
+      if (!section || !track || !videos.length) return;
+
+      videos.forEach(function (v) {
+        const slide = document.createElement('div');
+        slide.className = 'vc-slide';
+
+        const frame = document.createElement('div');
+        frame.className = 'vc-frame';
+        frame.setAttribute('role', 'button');
+        frame.setAttribute('tabindex', '0');
+        frame.setAttribute('aria-label', 'Reproduzir vídeo: ' + (v.title || ''));
+        frame.innerHTML =
+          '<img loading="lazy" src="https://i.ytimg.com/vi/' + v.id + '/hqdefault.jpg" alt="' + (v.title || 'Vídeo') + '" />' +
+          '<span class="vc-overlay"><span class="vc-playbtn"></span></span>';
+
+        function play() {
+          frame.innerHTML =
+            '<iframe src="https://www.youtube-nocookie.com/embed/' + v.id + '?autoplay=1&rel=0" ' +
+            'title="' + (v.title || 'Vídeo') + '" ' +
+            'allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>';
+        }
+
+        frame.addEventListener('click', play);
+        frame.addEventListener('keydown', function (e) {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            play();
+          }
+        });
+
+        slide.appendChild(frame);
+        if (v.title) {
+          const t = document.createElement('p');
+          t.className = 'vc-title';
+          t.textContent = v.title;
+          slide.appendChild(t);
+        }
+        track.appendChild(slide);
+      });
+
+      section.hidden = false;
+
+      function scrollByCards(dir) {
+        const card = track.querySelector('.vc-slide');
+        const amount = card ? card.getBoundingClientRect().width + 14 : track.clientWidth * 0.8;
+        track.scrollBy({ left: dir * amount, behavior: 'smooth' });
+      }
+      const prev = section.querySelector('[data-vc-prev]');
+      const next = section.querySelector('[data-vc-next]');
+      if (prev) prev.addEventListener('click', function () { scrollByCards(-1); });
+      if (next) next.addEventListener('click', function () { scrollByCards(1); });
     })();
   </script>
 </body>
