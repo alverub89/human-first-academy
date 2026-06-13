@@ -1255,14 +1255,53 @@
     }
 
     .hero-visual {
-      width: 100%;
+      position: relative;
+      margin-bottom: 14px;
       border-radius: 16px;
+      overflow: hidden;
       border: 1px solid var(--line);
       box-shadow: var(--shadow-card);
-      margin-bottom: 14px;
+    }
+
+    .hero-visual img {
+      width: 100%;
       display: block;
       aspect-ratio: 16 / 10;
       object-fit: cover;
+    }
+
+    .hero-pipeline {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 6px;
+      padding: 10px;
+      background: linear-gradient(180deg, rgba(26, 22, 20, 0), rgba(26, 22, 20, 0.85));
+    }
+
+    .hero-pipeline span {
+      background: rgba(255, 255, 255, 0.92);
+      color: var(--ink);
+      font-size: 0.72rem;
+      font-weight: 800;
+      padding: 4px 9px;
+      border-radius: 999px;
+    }
+
+    .hero-pipeline span.is-out {
+      background: var(--accent);
+      color: #fff;
+    }
+
+    .hero-pipeline i {
+      color: #fff;
+      font-style: normal;
+      font-weight: 900;
     }
 
     .onda-ladder {
@@ -1287,6 +1326,92 @@
     .onda.is-current { border-color: var(--accent); background: #fff3ee; }
     .onda.is-current .onda-price { color: var(--accent); }
     .offer .onda-note { margin-top: 2px; font-size: 0.8rem; color: var(--muted); }
+
+    .intro-author-highlight {
+      font-weight: 800;
+      color: var(--accent-dark);
+      font-size: 1rem;
+    }
+
+    .artifact {
+      margin-top: 16px;
+      max-width: 460px;
+    }
+
+    .artifact-label {
+      font-size: 0.74rem;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+
+    .artifact-card {
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: #fff;
+      box-shadow: var(--shadow-card);
+      padding: 16px;
+    }
+
+    .artifact-head {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+
+    .artifact-tag {
+      background: var(--accent);
+      color: #fff;
+      font-size: 0.68rem;
+      font-weight: 900;
+      letter-spacing: 0.05em;
+      padding: 3px 8px;
+      border-radius: 6px;
+    }
+
+    .artifact-head strong { color: var(--ink); }
+    .artifact-row { margin: 0 0 10px; color: var(--muted); font-size: 0.88rem; }
+
+    .artifact-row span,
+    .artifact-ac > span {
+      font-size: 0.7rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      color: var(--accent-dark);
+    }
+
+    .artifact-row span { margin-right: 6px; }
+    .artifact-ac > span { display: block; margin-bottom: 4px; }
+
+    .artifact-ac ul {
+      margin: 0;
+      padding-left: 18px;
+      display: grid;
+      gap: 4px;
+      color: var(--muted);
+      font-size: 0.86rem;
+    }
+
+    .artifact-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 12px;
+    }
+
+    .artifact-pill {
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: var(--trust-soft);
+      color: var(--trust-deep);
+      font-size: 0.74rem;
+      font-weight: 800;
+      padding: 4px 10px;
+    }
 
     @media (max-width: 980px) {
       .hero,
@@ -1438,7 +1563,12 @@
       </div>
 
       <div class="hero-right">
-        <img class="hero-visual" src="./assets/hero-pm-ai-premium.webp.png" alt="Backlog e contexto de produto na prática" loading="eager" />
+        <div class="hero-visual">
+          <img src="./assets/hero-pm-ai-premium.webp.png" alt="Do hype ao backlog: discovery, contexto, spec e backlog" loading="eager" />
+          <div class="hero-pipeline" aria-hidden="true">
+            <span>Hype</span><i>&rarr;</i><span>Discovery</span><i>&rarr;</i><span>Contexto</span><i>&rarr;</i><span>Spec</span><i>&rarr;</i><span class="is-out">Backlog</span>
+          </div>
+        </div>
         <aside class="offer" id="checkout">
         <span class="pill">Onda 1 de validação</span>
         <h3 style="margin-top:10px;">Oferta desta onda</h3>
@@ -1480,7 +1610,8 @@
         <img src="./assets/instructor-portrait.webp.png" alt="Rubão Alves" loading="lazy" />
         <div class="intro-author-text">
           <span class="intro-author-name">Conduzido por Rubão Alves</span>
-          <span class="intro-author-role">Líder de produto &amp; tecnologia &middot; criador da Cida (carreira com IA)</span>
+          <span class="intro-author-highlight">~20 anos construindo produtos digitais</span>
+          <span class="intro-author-role">Liderança em produto, growth e transformação digital &middot; criador da Cida</span>
         </div>
         <div class="intro-author-creds">
           <span class="intro-cred"><strong>~20 anos</strong> em tech e produto</span>
@@ -1710,6 +1841,22 @@
         <div class="flow-step"><span class="flow-ic">3</span><strong>Spec</strong><p>Requisitos e critérios de aceite com edge cases</p></div>
         <span class="flow-arrow" aria-hidden="true">&rarr;</span>
         <div class="flow-step"><span class="flow-ic">4</span><strong>Backlog</strong><p>Histórias priorizadas, prontas para o time</p></div>
+      </div>
+      <div class="artifact">
+        <div class="artifact-label">Exemplo de saída do método</div>
+        <div class="artifact-card">
+          <div class="artifact-head"><span class="artifact-tag">SPEC</span><strong>Checkout em 1 clique</strong></div>
+          <p class="artifact-row"><span>História</span> Como cliente recorrente, quero finalizar a compra em 1 clique para não repetir meus dados a cada pedido.</p>
+          <div class="artifact-ac">
+            <span>Critérios de aceite</span>
+            <ul>
+              <li>Cartão salvo é usado por padrão, com opção de trocar</li>
+              <li>Falha de pagamento permite novo try sem sair da tela</li>
+              <li>Edge case: cartão expirado redireciona para atualização</li>
+            </ul>
+          </div>
+          <div class="artifact-meta"><span class="artifact-pill">Prioridade P1</span><span class="artifact-pill">Esforço M</span><span class="artifact-pill">Discovery &#10003;</span></div>
+        </div>
       </div>
     </section>
 
