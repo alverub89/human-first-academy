@@ -633,11 +633,67 @@
       font-variant-numeric: tabular-nums;
     }
 
+    .section-lead {
+      color: var(--muted);
+      margin: 0 0 16px;
+      max-width: 70ch;
+      font-size: 1.02rem;
+    }
+
+    .outcomes {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .outcome {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: linear-gradient(160deg, #ffffff, #fdf8f4);
+      padding: 16px;
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+    }
+
+    .outcome:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 14px 24px rgba(26, 22, 20, 0.1);
+    }
+
+    .outcome-check {
+      flex: 0 0 auto;
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(135deg, var(--accent), var(--accent-deep));
+      color: #fff;
+      font-size: 0.9rem;
+      font-weight: 900;
+      margin-top: 2px;
+    }
+
+    .outcome strong {
+      display: block;
+      font-size: 1rem;
+      letter-spacing: -0.01em;
+    }
+
+    .outcome p {
+      margin: 4px 0 0;
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+
     @media (max-width: 980px) {
       .hero,
       .two-col,
       .program,
       .proof-grid,
+      .outcomes,
       .about {
         grid-template-columns: 1fr;
       }
@@ -833,6 +889,57 @@
             <li>Menos ambiguidade, mais qualidade de entrega</li>
             <li>Projeto final com backlog real do seu contexto</li>
           </ul>
+        </article>
+      </div>
+    </section>
+
+    <div class="section-break" aria-hidden="true"></div>
+
+    <section class="section motion-reveal" id="resultados">
+      <h2>O que você será capaz de fazer depois</h2>
+      <p class="section-lead">Ao terminar o curso, você aplica IA no backlog da semana com método — saindo do hype para entregas reais de produto.</p>
+      <div class="outcomes">
+        <article class="outcome motion-reveal motion-delay-1">
+          <span class="outcome-check" aria-hidden="true">&#10003;</span>
+          <div>
+            <strong>Transformar conversas em backlog</strong>
+            <p>Sair de reuniões, entrevistas e lotes de feedback com epics, histórias e critérios de aceite prontos para refinamento.</p>
+          </div>
+        </article>
+        <article class="outcome motion-reveal motion-delay-2">
+          <span class="outcome-check" aria-hidden="true">&#10003;</span>
+          <div>
+            <strong>Escrever prompts de produto profissionais</strong>
+            <p>Estruturar prompts e rodar o loop gerar &rarr; criticar &rarr; refinar para chegar a respostas úteis, não genéricas.</p>
+          </div>
+        </article>
+        <article class="outcome motion-reveal motion-delay-3">
+          <span class="outcome-check" aria-hidden="true">&#10003;</span>
+          <div>
+            <strong>Produzir specs com menos ambiguidade</strong>
+            <p>Detalhar requisitos e mapear edge cases para reduzir retrabalho e idas e vindas com engenharia e design.</p>
+          </div>
+        </article>
+        <article class="outcome motion-reveal motion-delay-1">
+          <span class="outcome-check" aria-hidden="true">&#10003;</span>
+          <div>
+            <strong>Acelerar o discovery</strong>
+            <p>Sintetizar pesquisa qualitativa e dados em insights acionáveis em minutos, não em dias.</p>
+          </div>
+        </article>
+        <article class="outcome motion-reveal motion-delay-2">
+          <span class="outcome-check" aria-hidden="true">&#10003;</span>
+          <div>
+            <strong>Decidir com critério</strong>
+            <p>Saber quando confiar na IA e quando corrigir, sem terceirizar a decisão de produto para a ferramenta.</p>
+          </div>
+        </article>
+        <article class="outcome motion-reveal motion-delay-3">
+          <span class="outcome-check" aria-hidden="true">&#10003;</span>
+          <div>
+            <strong>Comunicar com stakeholders</strong>
+            <p>Usar IA para estruturar narrativa, trade-offs e atualizações claras que destravam decisões.</p>
+          </div>
         </article>
       </div>
     </section>
