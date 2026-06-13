@@ -1365,8 +1365,13 @@
           method: 'POST',
           headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
           body: body
-        }).then(function () {
-          if (wrap) wrap.classList.add('is-done');
+        }).then(function (res) {
+          if (res.ok) {
+            if (wrap) wrap.classList.add('is-done');
+          } else {
+            // Form not registered by Netlify yet -> fall back to a native post.
+            form.submit();
+          }
         }).catch(function () {
           form.submit();
         });
