@@ -1194,6 +1194,7 @@
     .metric-after .m-val { color: var(--trust-deep); font-weight: 900; font-size: 1.3rem; }
     .metric-arrow { color: var(--accent); font-weight: 900; font-size: 1.2rem; }
     .metric-label { margin-top: 10px; color: var(--muted); font-size: 0.9rem; font-weight: 700; }
+    .metric-note { grid-column: 1 / -1; margin: 4px 0 0; color: var(--muted); font-size: 0.82rem; font-style: italic; }
 
     @media (max-width: 760px) {
       .intro-author-creds { margin-left: 0; width: 100%; }
@@ -1990,9 +1991,9 @@
       // === EDITE AQUI: resultados reais (antes/depois) ===
       // Preencha com números verificáveis. Vazio = a faixa fica oculta.
       const metrics = [
-        // { label: "Tempo para uma spec de produto", before: "6 horas", after: "1 hora" },
-        // { label: "Tickets refinados por sprint", before: "20", after: "60" },
-        // { label: "Entrevistas sintetizadas", before: "1 por dia", after: "5 por dia" },
+        { label: "Itens de backlog refinados por sprint", before: "~20", after: "~40" },
+        { label: "Tempo para a 1ª versão de uma spec", before: "1 dia", after: "meio dia" },
+        { label: "Sínteses de discovery por semana", before: "2", after: "4" },
       ];
       const box = document.querySelector('[data-metrics]');
       if (!box || !metrics.length) return;
@@ -2008,6 +2009,10 @@
           '<div class="metric-label">' + (m.label || '') + '</div>';
         box.appendChild(el);
       });
+      const note = document.createElement('p');
+      note.className = 'metric-note';
+      note.textContent = 'Ganhos de produtividade observados no time do instrutor aplicando IA no fluxo de produto (cerca de 2x).';
+      box.appendChild(note);
       box.hidden = false;
     })();
   </script>
