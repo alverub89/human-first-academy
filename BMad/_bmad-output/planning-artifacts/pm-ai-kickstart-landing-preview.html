@@ -958,12 +958,128 @@
       border-color: #ff0000;
     }
 
+    .format-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 16px;
+    }
+
+    .format-chip {
+      display: inline-flex;
+      align-items: center;
+      border: 1px solid rgba(200, 85, 61, 0.28);
+      background: var(--paper);
+      color: var(--accent-dark);
+      border-radius: 999px;
+      font-size: 0.82rem;
+      font-weight: 800;
+      padding: 6px 12px;
+    }
+
+    .authority {
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+      background: linear-gradient(90deg, #fefaf7, #fffdfb);
+      margin-top: 6px;
+    }
+
+    .authority-inner {
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: 12px 20px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 10px 16px;
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+
+    .authority-item strong { color: var(--ink); }
+
+    .authority-sep {
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: var(--accent);
+      opacity: 0.6;
+    }
+
+    .icp-list {
+      list-style: none;
+      margin: 10px 0 0;
+      padding: 0;
+      display: grid;
+      gap: 8px;
+      color: var(--muted);
+    }
+
+    .icp-list li {
+      position: relative;
+      padding-left: 26px;
+    }
+
+    .icp-list li::before {
+      content: "\2713";
+      position: absolute;
+      left: 0;
+      top: 0;
+      color: var(--trust);
+      font-weight: 900;
+    }
+
+    .icp-list-no li::before {
+      content: "\2715";
+      color: #b06250;
+    }
+
+    .beforeafter {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .ba-col {
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 16px 18px;
+    }
+
+    .ba-before { background: #fbf2ee; border-color: #eccdc0; }
+    .ba-after { background: var(--trust-soft); border-color: rgba(47, 107, 94, 0.3); }
+
+    .ba-tag {
+      display: inline-block;
+      font-size: 0.74rem;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      padding: 4px 10px;
+      border-radius: 999px;
+      margin-bottom: 10px;
+    }
+
+    .ba-before .ba-tag { background: #f3d9cf; color: #8f3c26; }
+    .ba-after .ba-tag { background: #cfe6dd; color: var(--trust-deep); }
+
+    .ba-col ul {
+      margin: 0;
+      padding-left: 18px;
+      display: grid;
+      gap: 8px;
+      color: var(--muted);
+    }
+
+    .ba-after ul { color: #2f4a43; }
+
     @media (max-width: 980px) {
       .hero,
       .two-col,
       .program,
       .proof-grid,
       .outcomes,
+      .beforeafter,
       .about {
         grid-template-columns: 1fr;
       }
@@ -1084,6 +1200,13 @@
           <a class="btn btn-ghost" href="#ementa">Ver ementa completa</a>
         </div>
 
+        <div class="format-row">
+          <span class="format-chip">Curso prático on-demand</span>
+          <span class="format-chip">14 aulas (8&ndash;20 min)</span>
+          <span class="format-chip">Comunidade fechada</span>
+          <span class="format-chip">Projeto final + certificado</span>
+        </div>
+
         <div class="hero-stats">
           <div class="stat"><strong>14 aulas praticas</strong><span>micro-formato de 8 a 20 min</span></div>
           <div class="stat"><strong>~10 horas</strong><span>3h aula + 7h aplicação guiada</span></div>
@@ -1113,6 +1236,18 @@
       </aside>
     </section>
 
+    <section class="authority" aria-label="Credenciais do instrutor">
+      <div class="authority-inner">
+        <span class="authority-item"><strong>~20 anos</strong> em tecnologia e produto</span>
+        <span class="authority-sep" aria-hidden="true"></span>
+        <span class="authority-item">Liderou plataformas digitais para <strong>milhões de usuários</strong></span>
+        <span class="authority-sep" aria-hidden="true"></span>
+        <span class="authority-item">Aplica <strong>IA em produto</strong> no dia a dia</span>
+        <span class="authority-sep" aria-hidden="true"></span>
+        <span class="authority-item">Criador da <strong>Cida</strong>, plataforma de carreira com IA</span>
+      </div>
+    </section>
+
     <section class="trust-strip motion-reveal" aria-label="Sinais de confianca">
       <div class="logos">
         <span>Aplicação imediata</span><span>Backlog real</span><span>Método pratico</span><span>PM mindset</span><span>Sem teoria vazia</span><span>Projeto final</span><span>Aplicação imediata</span><span>Backlog real</span><span>Método pratico</span><span>PM mindset</span><span>Sem teoria vazia</span><span>Projeto final</span>
@@ -1123,12 +1258,20 @@
 
     <section class="section two-col motion-reveal">
       <article class="mini motion-reveal motion-delay-1">
-        <h3>Para quem e</h3>
-        <p>PMs e líderes de produto que querem aplicar IA no backlog da semana e ganhar velocidade com critério.</p>
+        <h3>Ideal para</h3>
+        <ul class="icp-list">
+          <li>PMs plenos e seniores</li>
+          <li>Product Leads e Heads de Produto</li>
+          <li>POs que decidem o que entra no backlog</li>
+        </ul>
       </article>
       <article class="mini motion-reveal motion-delay-2">
-        <h3>Para quem não e</h3>
-        <p>Quem busca formacao técnica profunda de ML, curso de programacao ou terceirizar decisão de produto para IA.</p>
+        <h3>Não é para</h3>
+        <ul class="icp-list icp-list-no">
+          <li>Quem quer aprender a programar ou ML</li>
+          <li>Quem busca fundamentos básicos de produto</li>
+          <li>Quem quer só uma lista de prompts</li>
+        </ul>
       </article>
     </section>
 
@@ -1170,50 +1313,128 @@
 
     <div class="section-break" aria-hidden="true"></div>
 
-    <section class="section motion-reveal" id="resultados">
-      <h2>O que você será capaz de fazer depois</h2>
-      <p class="section-lead">Ao terminar o curso, você aplica IA no backlog da semana com método — saindo do hype para entregas reais de produto.</p>
+    <section class="section motion-reveal" id="entregaveis">
+      <h2>Você sai com isto pronto para usar</h2>
+      <p class="section-lead">Não são "aulas sobre IA". São ativos de trabalho que você passa a aplicar no backlog da semana.</p>
       <div class="outcomes">
         <article class="outcome motion-reveal motion-delay-1">
           <span class="outcome-check" aria-hidden="true">&#10003;</span>
           <div>
-            <strong>Transformar conversas em backlog</strong>
-            <p>Sair de reuniões, entrevistas e lotes de feedback com epics, histórias e critérios de aceite prontos para refinamento.</p>
+            <strong>Estrutura de prompt profissional para produto</strong>
+            <p>Um padrão reutilizável para tirar respostas úteis da IA &mdash; não respostas genéricas.</p>
           </div>
         </article>
         <article class="outcome motion-reveal motion-delay-2">
           <span class="outcome-check" aria-hidden="true">&#10003;</span>
           <div>
-            <strong>Escrever prompts de produto profissionais</strong>
-            <p>Estruturar prompts e rodar o loop gerar &rarr; criticar &rarr; refinar para chegar a respostas úteis, não genéricas.</p>
+            <strong>Fluxo de refinamento com critério</strong>
+            <p>O loop gerar &rarr; criticar &rarr; refinar para evoluir o backlog com qualidade, não no chute.</p>
           </div>
         </article>
         <article class="outcome motion-reveal motion-delay-3">
           <span class="outcome-check" aria-hidden="true">&#10003;</span>
           <div>
-            <strong>Produzir specs com menos ambiguidade</strong>
-            <p>Detalhar requisitos e mapear edge cases para reduzir retrabalho e idas e vindas com engenharia e design.</p>
+            <strong>Roteiro de discovery assistido por IA</strong>
+            <p>Conduzir discovery e sintetizar feedback de forma estruturada, em minutos.</p>
           </div>
         </article>
         <article class="outcome motion-reveal motion-delay-1">
           <span class="outcome-check" aria-hidden="true">&#10003;</span>
           <div>
-            <strong>Acelerar o discovery</strong>
-            <p>Sintetizar pesquisa qualitativa e dados em insights acionáveis em minutos, não em dias.</p>
+            <strong>Critérios de aceite com edge cases</strong>
+            <p>Specs menos ambíguas que reduzem retrabalho com engenharia e design.</p>
           </div>
         </article>
         <article class="outcome motion-reveal motion-delay-2">
           <span class="outcome-check" aria-hidden="true">&#10003;</span>
           <div>
-            <strong>Decidir com critério</strong>
-            <p>Saber quando confiar na IA e quando corrigir, sem terceirizar a decisão de produto para a ferramenta.</p>
+            <strong>Método do hype ao backlog</strong>
+            <p>A sequência completa para transformar tendência de IA em entrega real.</p>
           </div>
         </article>
         <article class="outcome motion-reveal motion-delay-3">
           <span class="outcome-check" aria-hidden="true">&#10003;</span>
           <div>
-            <strong>Comunicar com stakeholders</strong>
-            <p>Usar IA para estruturar narrativa, trade-offs e atualizações claras que destravam decisões.</p>
+            <strong>Projeto final com backlog do seu contexto</strong>
+            <p>Você termina com um entregável de verdade, aplicado ao seu próprio produto.</p>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <div class="section-break" aria-hidden="true"></div>
+
+    <section class="section motion-reveal" id="transformacao">
+      <h2>O que muda no seu dia a dia</h2>
+      <p class="section-lead">Você não compra ementa. Compra uma nova forma de trabalhar.</p>
+      <div class="beforeafter">
+        <div class="ba-col ba-before motion-reveal motion-delay-1">
+          <span class="ba-tag">Antes</span>
+          <ul>
+            <li>Escreve specs do zero, partindo da página em branco</li>
+            <li>Refinamentos longos, com idas e vindas no time</li>
+            <li>Usa IA de forma genérica, com resultado raso</li>
+            <li>Sofre para priorizar e justificar decisões</li>
+          </ul>
+        </div>
+        <div class="ba-col ba-after motion-reveal motion-delay-2">
+          <span class="ba-tag">Depois</span>
+          <ul>
+            <li>Cria specs assistidas por IA, mais rápido e com menos ambiguidade</li>
+            <li>Refina backlog em uma fração do tempo</li>
+            <li>Aplica IA com critério em discovery, síntese e comunicação</li>
+            <li>Entrega mais com menos esforço operacional</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <div class="section-break" aria-hidden="true"></div>
+
+    <section class="section motion-reveal" id="diferencial">
+      <h2>O que você encontra aqui e não no conteúdo gratuito</h2>
+      <p class="section-lead">No YouTube você acha peças soltas. Aqui você tem o sistema completo, aplicado ao seu trabalho.</p>
+      <div class="outcomes">
+        <article class="outcome motion-reveal motion-delay-1">
+          <span class="outcome-check" aria-hidden="true">&#10003;</span>
+          <div>
+            <strong>Sistema completo, não peças soltas</strong>
+            <p>Uma sequência estruturada do hype ao backlog &mdash; não vídeos avulsos sem fio condutor.</p>
+          </div>
+        </article>
+        <article class="outcome motion-reveal motion-delay-2">
+          <span class="outcome-check" aria-hidden="true">&#10003;</span>
+          <div>
+            <strong>Aplicação no seu backlog real</strong>
+            <p>Você pratica no seu contexto, não em exemplos genéricos de tutorial.</p>
+          </div>
+        </article>
+        <article class="outcome motion-reveal motion-delay-3">
+          <span class="outcome-check" aria-hidden="true">&#10003;</span>
+          <div>
+            <strong>Critério de decisão</strong>
+            <p>Quando confiar na IA e quando corrigir &mdash; o que nenhum conteúdo gratuito te entrega.</p>
+          </div>
+        </article>
+        <article class="outcome motion-reveal motion-delay-1">
+          <span class="outcome-check" aria-hidden="true">&#10003;</span>
+          <div>
+            <strong>Projeto que vira entregável</strong>
+            <p>Sai com um artefato aplicável, não só com anotações soltas.</p>
+          </div>
+        </article>
+        <article class="outcome motion-reveal motion-delay-2">
+          <span class="outcome-check" aria-hidden="true">&#10003;</span>
+          <div>
+            <strong>Comunidade fechada</strong>
+            <p>Tire dúvidas e troque com outros PMs aplicando o mesmo método.</p>
+          </div>
+        </article>
+        <article class="outcome motion-reveal motion-delay-3">
+          <span class="outcome-check" aria-hidden="true">&#10003;</span>
+          <div>
+            <strong>Curadoria sem ruído</strong>
+            <p>O que importa para produto, sem perder horas filtrando hype.</p>
           </div>
         </article>
       </div>
