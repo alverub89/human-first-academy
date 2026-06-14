@@ -1666,7 +1666,7 @@
 <body>
   <div class="topbar">
     <div class="topbar-inner">
-      <div class="wave-chip">Valor normal <strong>R$ 497</strong> | Onda atual <strong>R$ 197</strong> | Onda 1 encerra em <span class="count-inline" data-countdown-inline>2d 00h 00m</span></div>
+      <div class="wave-chip">Onda atual <strong data-wave-price>R$ 197</strong> &middot; valor cheio R$ 497 &middot; <span data-wave-label>Onda 1</span> encerra em <span class="count-inline" data-countdown-inline>2d 00h 00m</span></div>
       <a class="btn btn-primary" href="#checkout">Quero minha vaga nesta onda</a>
     </div>
   </div>
@@ -2131,20 +2131,32 @@
     })();
 
     (function () {
-      // Once the flash window ends, the promo price is hidden for this many days.
-      const LOCK_DAYS = 3;
-      const durationMs = 2 * 24 * 60 * 60 * 1000;
-      const lockMs = LOCK_DAYS * 24 * 60 * 60 * 1000;
-      const deadlineKey = "hfa_offer_deadline_v3";
-      const lockKey = "hfa_offer_lock_v3";
+      // === Ondas de preço: o valor sobe conforme o tempo passa desde a 1ª visita ===
+      const ONDA_DAYS = 2; // duração de cada onda, em dias (ajuste aqui)
+      const ondaMs = ONDA_DAYS * 24 * 60 * 60 * 1000;
+      const firstVisitKey = "hfa_first_visit_v4";
       const START_SPOTS = 12;
       const MIN_SPOTS = 3;
+
+      const TIERS = [
+        { onda: 1, price: "R$ 197", label: "Onda 1" },
+        { onda: 2, price: "R$ 297", label: "Onda 2" },
+        { onda: 3, price: "R$ 397", label: "Onda 3" },
+        { onda: 4, price: "R$ 497", label: "Valor cheio", full: true }
+      ];
+      const LAST = TIERS.length - 1;
 
       const inlineNode = document.querySelector("[data-countdown-inline]");
       const mainNode = document.querySelector("[data-countdown-main]");
       const finalNode = document.querySelector("[data-countdown-final]");
-      const offerBox = document.querySelector(".offer");
-      const ctaButton = document.querySelector(".offer .btn-primary");
+      const wavePrice = document.querySelector("[data-wave-price]");
+      const waveLabel = document.querySelector("[data-wave-label]");
+      const waveChip = document.querySelector(".wave-chip");
+      const pill = document.querySelector(".offer .pill");
+      const newPrice = document.querySelector(".offer .new");
+      const finalLead = document.querySelector(".final p");
+      const cdBox = document.querySelector(".countdown-box");
+      const finalTimer = document.querySelector(".final-timer");
       const spotsNode = document.querySelector("[data-spots]");
       const spotsBox = document.querySelector("[data-spots-box]");
       let timerId = null;
@@ -2167,107 +2179,80 @@
         return pad(minutes) + ":" + pad(seconds);
       }
 
-      function spotsFor(diff) {
-        const ratio = Math.max(0, Math.min(1, diff / durationMs));
+      function spotsFor(remaining) {
+        const ratio = Math.max(0, Math.min(1, remaining / ondaMs));
         return MIN_SPOTS + Math.round(ratio * (START_SPOTS - MIN_SPOTS));
       }
 
-      // Virada de lote: a Onda 1 esgota e a Onda 2 (R$ 297) passa a ser a atual e comprável.
-      function applyNormalPricing() {
-        const newPrice = document.querySelector(".offer .new");
-        if (newPrice) newPrice.textContent = "R$ 297";
+      function renderTier(idx) {
+        const tier = TIERS[idx];
+        if (newPrice) newPrice.textContent = tier.price;
+        if (pill) pill.textContent = tier.full ? "Valor cheio" : (tier.label + " de validação");
+        if (wavePrice) wavePrice.textContent = tier.price;
+        if (waveLabel) waveLabel.textContent = tier.full ? "Valor cheio" : tier.label;
 
-        const pill = document.querySelector(".offer .pill");
-        if (pill) pill.textContent = "Onda 2 de validação";
+        TIERS.forEach(function (t, i) {
+          const el = document.querySelector('[data-onda="' + t.onda + '"]');
+          if (!el) return;
+          el.classList.remove("is-current", "is-soldout");
+          const nameEl = el.querySelector(".onda-name");
+          const base = t.full ? "Cheio" : t.label;
+          if (i < idx) {
+            el.classList.add("is-soldout");
+            if (nameEl) nameEl.innerHTML = base + " &middot; esgotada";
+          } else if (i === idx) {
+            el.classList.add("is-current");
+            if (nameEl) nameEl.innerHTML = base + " &middot; agora";
+          } else if (nameEl) {
+            nameEl.textContent = base;
+          }
+        });
 
-        const o1 = document.querySelector('[data-onda="1"]');
-        const o2 = document.querySelector('[data-onda="2"]');
-        if (o1) {
-          o1.classList.remove("is-current");
-          o1.classList.add("is-soldout");
-          const n1 = o1.querySelector(".onda-name");
-          if (n1) n1.innerHTML = "Onda 1 &middot; esgotada";
+        if (tier.full) {
+          if (waveChip) waveChip.innerHTML = 'Valor cheio &middot; <strong>' + tier.price + '</strong>';
+          if (finalLead) finalLead.textContent = "Ondas promocionais encerradas. Valor atual: " + tier.price + ".";
+          if (cdBox) cdBox.style.display = "none";
+          if (finalTimer) finalTimer.style.display = "none";
+          if (spotsBox) spotsBox.textContent = "Preço promocional encerrado.";
+        } else if (finalLead) {
+          finalLead.textContent = tier.label + " por " + tier.price + ". O preço sobe a cada onda (valor cheio R$ 497).";
         }
-        if (o2) {
-          o2.classList.add("is-current");
-          const n2 = o2.querySelector(".onda-name");
-          if (n2) n2.innerHTML = "Onda 2 &middot; agora";
-        }
-
-        const waveChip = document.querySelector(".wave-chip");
-        if (waveChip) {
-          waveChip.innerHTML = 'Onda 2 &middot; <strong>R$ 297</strong> &middot; o preço sobe';
-        }
-        const finalLead = document.querySelector(".final p");
-        if (finalLead) {
-          finalLead.textContent = "Onda 1 esgotada. Você está na Onda 2: R$ 297 (o preço sobe a cada onda).";
-        }
-      }
-
-      function renderExpired() {
-        // Onda 1 acabou: vira lote (Onda 2). A oferta NÃO encerra.
-        applyNormalPricing();
-        const cdBox = document.querySelector(".countdown-box");
-        if (cdBox) cdBox.style.display = "none";
-        const finalTimer = document.querySelector(".final-timer");
-        if (finalTimer) finalTimer.style.display = "none";
-        if (spotsBox) spotsBox.innerHTML = "Onda 1 esgotada &middot; vagas da Onda 2 abertas.";
-        if (offerBox && !offerBox.querySelector("[data-lock-note]")) {
-          const note = document.createElement("p");
-          note.setAttribute("data-lock-note", "");
-          note.style.marginTop = "10px";
-          note.style.fontWeight = "800";
-          note.style.color = "#6d2b1c";
-          note.textContent = "A Onda 1 esgotou. Garanta a Onda 2 a R$ 297 antes de o preço subir.";
-          offerBox.appendChild(note);
-        }
-      }
-
-      function lockNow() {
-        localStorage.setItem(lockKey, String(Date.now() + lockMs));
       }
 
       function tick() {
-        const diff = targetTime - Date.now();
-        if (diff <= 0) {
+        const remaining = targetTime - Date.now();
+        if (remaining <= 0) {
           if (timerId) clearInterval(timerId);
-          lockNow();
-          renderExpired();
+          start();
           return;
         }
-        const text = formatRemaining(diff);
+        const text = formatRemaining(remaining);
         if (inlineNode) inlineNode.textContent = text;
-        if (mainNode) mainNode.textContent = text;
+        if (mainNode) { mainNode.textContent = text; mainNode.classList.toggle("is-urgent", remaining <= 60 * 60 * 1000); }
         if (finalNode) finalNode.textContent = text;
-        if (mainNode) {
-          mainNode.classList.toggle("is-urgent", diff <= 5 * 60 * 1000);
+        if (spotsNode) spotsNode.textContent = String(spotsFor(remaining));
+      }
+
+      function start() {
+        const now = Date.now();
+        let firstVisit = read(firstVisitKey);
+        if (firstVisit === null) {
+          firstVisit = now;
+          localStorage.setItem(firstVisitKey, String(firstVisit));
         }
-        if (spotsNode) spotsNode.textContent = String(spotsFor(diff));
+        const idx = Math.floor((now - firstVisit) / ondaMs);
+        if (idx >= LAST) {
+          renderTier(LAST);
+          return;
+        }
+        renderTier(idx);
+        targetTime = firstVisit + (idx + 1) * ondaMs;
+        if (timerId) clearInterval(timerId);
+        tick();
+        timerId = setInterval(tick, 1000);
       }
 
-      const now = Date.now();
-      const lockUntil = read(lockKey);
-
-      // Once Onda 1 ended for this visitor, stay on Onda 2 (price never drops back).
-      if (lockUntil !== null) {
-        renderExpired();
-        return;
-      }
-
-      let deadline = read(deadlineKey);
-      if (deadline === null) {
-        deadline = now + durationMs;
-        localStorage.setItem(deadlineKey, String(deadline));
-      } else if (deadline <= now) {
-        // The 15-min window already elapsed (left and came back) -> lock the promo.
-        lockNow();
-        renderExpired();
-        return;
-      }
-
-      targetTime = deadline;
-      tick();
-      timerId = setInterval(tick, 1000);
+      start();
     })();
 
     (function () {
