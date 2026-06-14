@@ -1306,8 +1306,8 @@
 
     .onda-ladder {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 6px;
+      grid-template-columns: repeat(auto-fit, minmax(70px, 1fr));
+      gap: 5px;
       margin: 6px 0 4px;
     }
 
@@ -1321,7 +1321,7 @@
       gap: 2px;
     }
 
-    .onda-name { font-size: 0.66rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.03em; color: var(--muted); }
+    .onda-name { font-size: 0.6rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.02em; color: var(--muted); }
     .onda-price { font-weight: 900; color: var(--ink); }
     .onda.is-current { border-color: var(--accent); background: #fff3ee; }
     .onda.is-current .onda-price { color: var(--accent); }
@@ -1666,7 +1666,7 @@
 <body>
   <div class="topbar">
     <div class="topbar-inner">
-      <div class="wave-chip">Valor normal <strong>R$ 497</strong> | Onda atual <strong>R$ 297</strong> | Onda 1 encerra em <span class="count-inline" data-countdown-inline>2d 00h 00m</span></div>
+      <div class="wave-chip">Valor normal <strong>R$ 497</strong> | Onda atual <strong>R$ 197</strong> | Onda 1 encerra em <span class="count-inline" data-countdown-inline>2d 00h 00m</span></div>
       <a class="btn btn-primary" href="#checkout">Quero minha vaga nesta onda</a>
     </div>
   </div>
@@ -1717,12 +1717,13 @@
         <h3 style="margin-top:10px;">Oferta desta onda</h3>
         <div class="price-row">
           <span class="old">R$ 497</span>
-          <span class="new">R$ 297</span>
+          <span class="new">R$ 197</span>
         </div>
         <div class="onda-ladder" aria-label="Ondas de preço">
-          <div class="onda is-current" data-onda="1"><span class="onda-name">Onda 1 &middot; agora</span><span class="onda-price">R$ 297</span></div>
-          <div class="onda" data-onda="2"><span class="onda-name">Onda 2</span><span class="onda-price">R$ 397</span></div>
-          <div class="onda" data-onda="3"><span class="onda-name">Valor cheio</span><span class="onda-price">R$ 497</span></div>
+          <div class="onda is-current" data-onda="1"><span class="onda-name">Onda 1 &middot; agora</span><span class="onda-price">R$ 197</span></div>
+          <div class="onda" data-onda="2"><span class="onda-name">Onda 2</span><span class="onda-price">R$ 297</span></div>
+          <div class="onda" data-onda="3"><span class="onda-name">Onda 3</span><span class="onda-price">R$ 397</span></div>
+          <div class="onda" data-onda="4"><span class="onda-name">Cheio</span><span class="onda-price">R$ 497</span></div>
         </div>
         <p class="onda-note">O preço sobe a cada onda. Você está na Onda 1.</p>
         <p>Curso completo + comunidade + certificado por entrega do projeto final.</p>
@@ -2038,7 +2039,7 @@
         <p>Sim. Alem de aplicação técnica no trabalho, ele aumenta sua maturidade de produto e visibilidade de impacto.</p>
       </details>
       <details>
-        <summary>Por que esta em R$ 297 agora?</summary>
+        <summary>Por que esta em R$ 197 agora?</summary>
         <p>Esta e a onda de validação com últimas vagas abertas no momento. O valor normal da oferta e R$ 497.</p>
       </details>
       <details>
@@ -2080,7 +2081,7 @@
 
     <section class="final motion-reveal">
       <h2>Dobre sua entrega de produto sem dobrar suas reuniões.</h2>
-      <p>Onda atual por R$ 297. Valor normal R$ 497. Últimas vagas.</p>
+      <p>Onda atual por R$ 197. Valor normal R$ 497. Últimas vagas.</p>
       <div class="final-timer" data-countdown-final>2d 00h 00m</div>
       <a class="btn btn-primary" href="#checkout">Quero acelerar minha promoção para PM</a>
       <div style="margin-top:10px;"><small>Preço da Onda 1 &middot; sobe na próxima onda &middot; 12 meses de acesso</small></div>
@@ -2171,10 +2172,10 @@
         return MIN_SPOTS + Math.round(ratio * (START_SPOTS - MIN_SPOTS));
       }
 
-      // Virada de lote: a Onda 1 esgota e a Onda 2 (R$ 397) passa a ser a atual e comprável.
+      // Virada de lote: a Onda 1 esgota e a Onda 2 (R$ 297) passa a ser a atual e comprável.
       function applyNormalPricing() {
         const newPrice = document.querySelector(".offer .new");
-        if (newPrice) newPrice.textContent = "R$ 397";
+        if (newPrice) newPrice.textContent = "R$ 297";
 
         const pill = document.querySelector(".offer .pill");
         if (pill) pill.textContent = "Onda 2 de validação";
@@ -2195,11 +2196,11 @@
 
         const waveChip = document.querySelector(".wave-chip");
         if (waveChip) {
-          waveChip.innerHTML = 'Onda 2 &middot; <strong>R$ 397</strong> &middot; sobe para R$ 497';
+          waveChip.innerHTML = 'Onda 2 &middot; <strong>R$ 297</strong> &middot; o preço sobe';
         }
         const finalLead = document.querySelector(".final p");
         if (finalLead) {
-          finalLead.textContent = "Onda 1 esgotada. Você está na Onda 2: R$ 397 (sobe para R$ 497).";
+          finalLead.textContent = "Onda 1 esgotada. Você está na Onda 2: R$ 297 (o preço sobe a cada onda).";
         }
       }
 
@@ -2217,7 +2218,7 @@
           note.style.marginTop = "10px";
           note.style.fontWeight = "800";
           note.style.color = "#6d2b1c";
-          note.textContent = "A Onda 1 esgotou. Garanta a Onda 2 a R$ 397 antes de subir para R$ 497.";
+          note.textContent = "A Onda 1 esgotou. Garanta a Onda 2 a R$ 297 antes de o preço subir.";
           offerBox.appendChild(note);
         }
       }
