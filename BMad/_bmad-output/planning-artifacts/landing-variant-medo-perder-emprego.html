@@ -1533,6 +1533,9 @@
     }
 
     .modal-body .artifact-meta { margin-top: 14px; }
+    .modal-body ol { margin: 6px 0 0; padding-left: 20px; color: var(--muted); display: grid; gap: 5px; }
+    .modal-body em { color: var(--ink); font-style: italic; }
+    .modal-body code { background: #faf3ef; border: 1px solid var(--line); border-radius: 5px; padding: 1px 5px; font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 0.84em; color: var(--ink); }
 
     @media (max-width: 980px) {
       .hero,
@@ -2407,62 +2410,118 @@
     (function () {
       const artifacts = [
         {
-          tag: "SPEC", title: "Checkout em 1 clique", teaser: "História, critérios de aceite e métricas de sucesso.",
+          tag: "SPEC", title: "Checkout em 1 clique", teaser: "Spec completa: problema, objetivo, métricas, critérios, edge cases, telemetria.",
           body: `<span class="artifact-tag">SPEC</span><h3>Checkout em 1 clique</h3>
-            <p class="m-section">História</p>
-            <p>Como cliente recorrente, quero finalizar a compra em 1 clique para não repetir meus dados a cada pedido.</p>
+            <p class="m-section">Contexto &amp; problema</p>
+            <p>Clientes recorrentes abandonam o checkout ao reencontrar formulários longos de pagamento e endereço. A fricção concentra-se na etapa final &mdash; justamente onde a intenção de compra é maior.</p>
+            <p class="m-section">Objetivo</p>
+            <p>Permitir finalizar a compra em uma única ação para clientes com dados salvos, reduzindo o abandono na etapa de pagamento.</p>
+            <p class="m-section">Métricas-alvo</p>
+            <ul>
+              <li>Conversão da etapa de pagamento: <strong>+8 a 12 p.p.</strong></li>
+              <li>Tempo médio de finalização: <strong>-40%</strong></li>
+              <li>Sem aumento na taxa de contestação/chargeback</li>
+            </ul>
+            <p class="m-section">História principal</p>
+            <p>Como cliente recorrente com cartão e endereço salvos, quero finalizar em 1 clique para não repetir dados a cada pedido.</p>
             <p class="m-section">Critérios de aceite</p>
             <ul>
-              <li>Cartão salvo é usado por padrão, com opção de trocar antes de confirmar</li>
-              <li>Falha de pagamento permite novo try sem sair da tela</li>
-              <li>Endereço padrão pré-preenchido e editável</li>
-              <li>Edge case: cartão expirado redireciona para atualização</li>
-              <li>Edge case: sem cartão salvo cai no fluxo padrão</li>
+              <li><strong>Dado</strong> cliente com cartão padrão, <strong>quando</strong> toca em "Comprar em 1 clique", <strong>então</strong> o pedido é criado sem etapas extras e exibe confirmação.</li>
+              <li>Cartão e endereço padrão são mostrados com opção de trocar antes de confirmar.</li>
+              <li>Falha de pagamento permite novo try sem sair da tela, preservando o carrinho.</li>
+              <li>Confirmação exibe resumo: itens, valor, cartão mascarado e endereço.</li>
             </ul>
-            <p class="m-section">Métricas de sucesso</p>
-            <ul><li>Aumento da conversão no checkout</li><li>Redução do tempo médio de finalização</li></ul>
-            <div class="artifact-meta"><span class="artifact-pill">Prioridade P1</span><span class="artifact-pill">Esforço M</span></div>`
+            <p class="m-section">Edge cases</p>
+            <ul>
+              <li>Cartão expirado &rarr; CTA leva à atualização e retorna ao checkout.</li>
+              <li>Sem cartão/endereço salvo &rarr; cai no fluxo padrão (botão não aparece).</li>
+              <li>Estoque esgotou entre carrinho e clique &rarr; bloqueia e avisa o item.</li>
+              <li>Cupom aplicado deve ser respeitado no 1 clique.</li>
+            </ul>
+            <p class="m-section">Fora de escopo</p>
+            <p>Parcelamento customizado, split de pagamento e inclusão de novos meios de pagamento.</p>
+            <p class="m-section">Telemetria</p>
+            <ul>
+              <li>Eventos: <code>one_click_shown</code>, <code>one_click_purchase</code>, <code>one_click_error</code></li>
+              <li>Funil: exibição &rarr; clique &rarr; sucesso/erro</li>
+            </ul>
+            <div class="artifact-meta"><span class="artifact-pill">Prioridade P1</span><span class="artifact-pill">Esforço M</span><span class="artifact-pill">Squad Checkout</span></div>`
         },
         {
-          tag: "BACKLOG", title: "Backlog priorizado — Onboarding", teaser: "Histórias com prioridade e esforço, prontas pro refinamento.",
-          body: `<span class="artifact-tag">BACKLOG</span><h3>Backlog priorizado — Onboarding</h3>
-            <p class="m-section">Histórias</p>
+          tag: "BACKLOG", title: "Backlog priorizado — Onboarding", teaser: "Épico completo: meta, histórias priorizadas, sequência e definição de pronto.",
+          body: `<span class="artifact-tag">BACKLOG</span><h3>Backlog priorizado &mdash; Onboarding</h3>
+            <p class="m-section">Meta do épico</p>
+            <p>Aumentar a ativação (primeira ação de valor) de novos usuários nos primeiros 7 dias.</p>
+            <p class="m-section">Histórias priorizadas</p>
             <ul>
-              <li><strong>[P1 · M]</strong> Tela de boas-vindas com setup guiado</li>
-              <li><strong>[P1 · S]</strong> Checklist de primeiros passos</li>
-              <li><strong>[P2 · M]</strong> Tooltips contextuais nas features-chave</li>
-              <li><strong>[P2 · L]</strong> Importação de dados do app anterior</li>
-              <li><strong>[P3 · S]</strong> E-mail de retomada para quem parou no meio</li>
+              <li><strong>[P1 · M]</strong> Setup guiado de boas-vindas &mdash; <em>aceite:</em> usuário conclui 3 passos e vê o primeiro resultado.</li>
+              <li><strong>[P1 · S]</strong> Checklist de primeiros passos com progresso visível.</li>
+              <li><strong>[P2 · M]</strong> Tooltips contextuais nas features-chave (primeira vez).</li>
+              <li><strong>[P2 · L]</strong> Importação de dados do app anterior.</li>
+              <li><strong>[P3 · S]</strong> E-mail de retomada para quem parou no meio.</li>
             </ul>
+            <p class="m-section">Sequência sugerida</p>
+            <p>Sprint 1: setup guiado + checklist &middot; Sprint 2: tooltips &middot; Sprint 3: importação &middot; contínuo: e-mail de retomada.</p>
             <p class="m-section">Critério de priorização</p>
-            <p>Impacto na ativação × esforço, validado com dados de discovery.</p>`
-        },
-        {
-          tag: "DISCOVERY", title: "Síntese de 12 entrevistas", teaser: "Padrões, dores e hipóteses priorizadas em minutos.",
-          body: `<span class="artifact-tag">DISCOVERY</span><h3>Síntese de 12 entrevistas — Retenção</h3>
-            <p class="m-section">Padrões encontrados</p>
+            <p>Impacto na ativação &times; esforço (RICE simplificado), validado com os dados do discovery.</p>
+            <p class="m-section">Definição de pronto</p>
             <ul>
-              <li>Maioria abandona antes de ver o primeiro valor (tempo até o "aha" alto)</li>
-              <li>Confusão entre duas features parecidas gera retrabalho</li>
-              <li>Avançados querem atalhos; iniciantes querem trilho guiado</li>
-            </ul>
-            <p class="m-section">Hipóteses priorizadas</p>
-            <ul>
-              <li>Encurtar o tempo até o primeiro valor aumenta a retenção em D7</li>
-              <li>Unificar as duas features reduz tickets de suporte</li>
+              <li>Critérios de aceite cobertos e testados</li>
+              <li>Evento de telemetria instrumentado</li>
+              <li>Texto revisado e acessível</li>
             </ul>`
         },
         {
-          tag: "PROMPT", title: "Prompt de refinamento de spec", teaser: "O template que gera → critica → refina com critério.",
+          tag: "DISCOVERY", title: "Síntese de 12 entrevistas", teaser: "Método, temas com frequência, citações, dores e hipóteses testáveis.",
+          body: `<span class="artifact-tag">DISCOVERY</span><h3>Síntese de 12 entrevistas &mdash; Retenção</h3>
+            <p class="m-section">Contexto &amp; método</p>
+            <p>12 entrevistas (8 churned, 4 ativos), 30 min cada. Transcrições sintetizadas com IA e revisadas manualmente; codificação por temas.</p>
+            <p class="m-section">Temas (por frequência)</p>
+            <ul>
+              <li><strong>9/12</strong> &mdash; não percebem valor antes de desistir (tempo até o "aha" alto).</li>
+              <li><strong>7/12</strong> &mdash; confundem duas features parecidas e retrabalham.</li>
+              <li><strong>5/12</strong> &mdash; avançados querem atalhos; iniciantes querem trilho guiado.</li>
+            </ul>
+            <p class="m-section">Citações</p>
+            <p>"Demorei pra entender pra que servia &mdash; desisti antes." &middot; "Achei que as duas eram a mesma coisa."</p>
+            <p class="m-section">Dores priorizadas</p>
+            <ol>
+              <li>Tempo até o primeiro valor</li>
+              <li>Ambiguidade entre features</li>
+              <li>Falta de trilho para iniciantes</li>
+            </ol>
+            <p class="m-section">Hipóteses testáveis</p>
+            <ul>
+              <li>Reduzir o tempo até o 1º valor aumenta a retenção em D7 &mdash; <em>medir via experimento de onboarding.</em></li>
+              <li>Unificar as duas features reduz tickets de suporte &mdash; <em>medir via volume de tickets.</em></li>
+            </ul>
+            <p class="m-section">Próximos passos</p>
+            <p>Levar a hipótese 1 para discovery de solução e priorizar no backlog de onboarding.</p>`
+        },
+        {
+          tag: "PROMPT", title: "Prompt de refinamento de spec", teaser: "Template completo, exemplo de uso, variações e anti-padrões.",
           body: `<span class="artifact-tag">PROMPT</span><h3>Prompt de refinamento de spec</h3>
-            <p class="m-section">Estrutura</p>
-            <pre>Contexto: [produto, usuário, objetivo de negócio]
-Tarefa: gere uma spec com história, critérios de aceite e edge cases.
-Restrições: [técnicas e de negócio]
-Auto-crítica: aponte ambiguidades, riscos e o que falta.
-Refino: reescreva cobrindo os edge cases mais prováveis.</pre>
-            <p class="m-section">Por que funciona</p>
-            <p>O loop gerar → criticar → refinar tira a IA da resposta genérica e aproxima do que o time consegue executar.</p>`
+            <p class="m-section">Template</p>
+            <pre>PAPEL: você é um PM sênior, cético e orientado a execução.
+CONTEXTO: [produto, usuário, objetivo de negócio, restrições]
+ENTRADA: [notas / transcrição / ideia bruta]
+TAREFA: gere uma spec com problema, objetivo, métrica-alvo,
+história e critérios de aceite (Dado/Quando/Então) + edge cases.
+AUTO-CRÍTICA: liste ambiguidades, riscos e o que está faltando.
+REFINO: reescreva cobrindo os 3 edge cases mais prováveis.
+SAÍDA: markdown, direto ao ponto.</pre>
+            <p class="m-section">Exemplo de uso</p>
+            <p>Cole a transcrição de uma call de discovery no campo ENTRADA e rode. A saída já vem em formato de spec, pronta para refino no squad.</p>
+            <p class="m-section">Variações</p>
+            <ul>
+              <li>Trocar a TAREFA por "gere só os critérios de aceite com edge cases" para refinar a parte de QA.</li>
+              <li>Adicionar "compare 2 abordagens e recomende uma, com trade-offs" para decisão.</li>
+            </ul>
+            <p class="m-section">Anti-padrões</p>
+            <ul>
+              <li>Pedir spec sem dar contexto/restrições &rarr; saída genérica.</li>
+              <li>Aceitar a 1ª versão sem o passo de auto-crítica.</li>
+            </ul>`
         }
       ];
 
