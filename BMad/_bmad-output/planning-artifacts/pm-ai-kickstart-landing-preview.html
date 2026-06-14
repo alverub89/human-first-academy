@@ -2157,6 +2157,8 @@
       const waveChip = document.querySelector(".wave-chip");
       const pill = document.querySelector(".offer .pill");
       const newPrice = document.querySelector(".offer .new");
+      const oldPrice = document.querySelector(".offer .old");
+      const ondaNote = document.querySelector(".onda-note");
       const finalLead = document.querySelector(".final p");
       const cdBox = document.querySelector(".countdown-box");
       const finalTimer = document.querySelector(".final-timer");
@@ -2190,6 +2192,8 @@
       function renderTier(idx) {
         const tier = TIERS[idx];
         if (newPrice) newPrice.textContent = tier.price;
+        if (oldPrice) oldPrice.style.display = tier.full ? "none" : "";
+        if (ondaNote) ondaNote.textContent = tier.full ? "As ondas promocionais terminaram — este é o valor cheio." : ("O preço sobe a cada onda. Você está na " + tier.label + ".");
         if (pill) pill.textContent = tier.full ? "Valor cheio" : (tier.label + " de validação");
         if (wavePrice) wavePrice.textContent = tier.price;
         if (waveLabel) waveLabel.textContent = tier.full ? "Valor cheio" : tier.label;
