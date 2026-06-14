@@ -1415,6 +1415,125 @@
       padding: 4px 10px;
     }
 
+    .artifacts { margin-top: 16px; }
+
+    .artifacts-label {
+      font-size: 0.74rem;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 10px;
+    }
+
+    .artifacts-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 12px;
+    }
+
+    .artifact-card-mini {
+      text-align: left;
+      cursor: pointer;
+      font: inherit;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: #fff;
+      box-shadow: var(--shadow-card);
+      padding: 16px;
+      display: grid;
+      gap: 6px;
+      align-content: start;
+      transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+    }
+
+    .artifact-card-mini:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 14px 24px rgba(26, 22, 20, 0.1);
+      border-color: var(--accent);
+    }
+
+    .artifact-card-mini .artifact-tag { justify-self: start; }
+    .artifact-card-mini strong { color: var(--ink); font-size: 0.98rem; }
+    .artifact-card-mini p { margin: 0; color: var(--muted); font-size: 0.86rem; }
+    .artifact-open { color: var(--accent-dark); font-weight: 800; font-size: 0.82rem; }
+
+    .modal {
+      position: fixed;
+      inset: 0;
+      z-index: 100;
+      display: grid;
+      place-items: center;
+      padding: 20px;
+    }
+
+    .modal[hidden] { display: none; }
+
+    .modal-backdrop {
+      position: absolute;
+      inset: 0;
+      background: rgba(26, 22, 20, 0.55);
+    }
+
+    .modal-card {
+      position: relative;
+      z-index: 1;
+      width: min(560px, 100%);
+      max-height: 86vh;
+      overflow-y: auto;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      box-shadow: var(--shadow-soft);
+      padding: 24px;
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 10px;
+      right: 14px;
+      border: 0;
+      background: transparent;
+      font-size: 1.7rem;
+      line-height: 1;
+      color: var(--muted);
+      cursor: pointer;
+    }
+
+    .modal-body h3 {
+      font-family: Fraunces, Georgia, serif;
+      font-size: 1.4rem;
+      margin: 6px 0 12px;
+      letter-spacing: -0.01em;
+    }
+
+    .modal-body .m-section {
+      margin: 14px 0 4px;
+      font-size: 0.72rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--accent-dark);
+    }
+
+    .modal-body p { margin: 0; color: var(--muted); }
+    .modal-body ul { margin: 6px 0 0; padding-left: 18px; color: var(--muted); display: grid; gap: 5px; }
+    .modal-body ul strong { color: var(--ink); }
+
+    .modal-body pre {
+      white-space: pre-wrap;
+      background: #faf3ef;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 12px;
+      font-size: 0.84rem;
+      color: var(--ink);
+      margin: 6px 0 0;
+      font-family: ui-monospace, Menlo, Consolas, monospace;
+    }
+
+    .modal-body .artifact-meta { margin-top: 14px; }
+
     @media (max-width: 980px) {
       .hero,
       .two-col,
@@ -1844,21 +1963,9 @@
         <span class="flow-arrow" aria-hidden="true">&rarr;</span>
         <div class="flow-step"><span class="flow-ic">4</span><strong>Backlog</strong><p>Histórias priorizadas, prontas para o time</p></div>
       </div>
-      <div class="artifact">
-        <div class="artifact-label">Exemplo de saída do método</div>
-        <div class="artifact-card">
-          <div class="artifact-head"><span class="artifact-tag">SPEC</span><strong>Checkout em 1 clique</strong></div>
-          <p class="artifact-row"><span>História</span> Como cliente recorrente, quero finalizar a compra em 1 clique para não repetir meus dados a cada pedido.</p>
-          <div class="artifact-ac">
-            <span>Critérios de aceite</span>
-            <ul>
-              <li>Cartão salvo é usado por padrão, com opção de trocar</li>
-              <li>Falha de pagamento permite novo try sem sair da tela</li>
-              <li>Edge case: cartão expirado redireciona para atualização</li>
-            </ul>
-          </div>
-          <div class="artifact-meta"><span class="artifact-pill">Prioridade P1</span><span class="artifact-pill">Esforço M</span><span class="artifact-pill">Discovery &#10003;</span></div>
-        </div>
+      <div class="artifacts">
+        <div class="artifacts-label">Exemplos de saída do método &mdash; clique para ver completo</div>
+        <div class="artifacts-grid" data-artifacts></div>
       </div>
     </section>
 
@@ -1957,6 +2064,14 @@
       <div style="margin-top:10px;"><small>Preço da Onda 1 &middot; sobe na próxima onda &middot; 12 meses de acesso</small></div>
     </section>
   </main>
+  <div class="modal" data-modal hidden>
+    <div class="modal-backdrop" data-modal-close></div>
+    <div class="modal-card" role="dialog" aria-modal="true">
+      <button class="modal-close" type="button" data-modal-close aria-label="Fechar">&times;</button>
+      <div class="modal-body" data-modal-body></div>
+    </div>
+  </div>
+
   <script>
     (function () {
       if ('scrollRestoration' in history) {
@@ -2287,6 +2402,103 @@
       note.textContent = 'Ganhos observados no time do instrutor aplicando IA no fluxo de produto.';
       box.appendChild(note);
       box.hidden = false;
+    })();
+
+    (function () {
+      const artifacts = [
+        {
+          tag: "SPEC", title: "Checkout em 1 clique", teaser: "História, critérios de aceite e métricas de sucesso.",
+          body: `<span class="artifact-tag">SPEC</span><h3>Checkout em 1 clique</h3>
+            <p class="m-section">História</p>
+            <p>Como cliente recorrente, quero finalizar a compra em 1 clique para não repetir meus dados a cada pedido.</p>
+            <p class="m-section">Critérios de aceite</p>
+            <ul>
+              <li>Cartão salvo é usado por padrão, com opção de trocar antes de confirmar</li>
+              <li>Falha de pagamento permite novo try sem sair da tela</li>
+              <li>Endereço padrão pré-preenchido e editável</li>
+              <li>Edge case: cartão expirado redireciona para atualização</li>
+              <li>Edge case: sem cartão salvo cai no fluxo padrão</li>
+            </ul>
+            <p class="m-section">Métricas de sucesso</p>
+            <ul><li>Aumento da conversão no checkout</li><li>Redução do tempo médio de finalização</li></ul>
+            <div class="artifact-meta"><span class="artifact-pill">Prioridade P1</span><span class="artifact-pill">Esforço M</span></div>`
+        },
+        {
+          tag: "BACKLOG", title: "Backlog priorizado — Onboarding", teaser: "Histórias com prioridade e esforço, prontas pro refinamento.",
+          body: `<span class="artifact-tag">BACKLOG</span><h3>Backlog priorizado — Onboarding</h3>
+            <p class="m-section">Histórias</p>
+            <ul>
+              <li><strong>[P1 · M]</strong> Tela de boas-vindas com setup guiado</li>
+              <li><strong>[P1 · S]</strong> Checklist de primeiros passos</li>
+              <li><strong>[P2 · M]</strong> Tooltips contextuais nas features-chave</li>
+              <li><strong>[P2 · L]</strong> Importação de dados do app anterior</li>
+              <li><strong>[P3 · S]</strong> E-mail de retomada para quem parou no meio</li>
+            </ul>
+            <p class="m-section">Critério de priorização</p>
+            <p>Impacto na ativação × esforço, validado com dados de discovery.</p>`
+        },
+        {
+          tag: "DISCOVERY", title: "Síntese de 12 entrevistas", teaser: "Padrões, dores e hipóteses priorizadas em minutos.",
+          body: `<span class="artifact-tag">DISCOVERY</span><h3>Síntese de 12 entrevistas — Retenção</h3>
+            <p class="m-section">Padrões encontrados</p>
+            <ul>
+              <li>Maioria abandona antes de ver o primeiro valor (tempo até o "aha" alto)</li>
+              <li>Confusão entre duas features parecidas gera retrabalho</li>
+              <li>Avançados querem atalhos; iniciantes querem trilho guiado</li>
+            </ul>
+            <p class="m-section">Hipóteses priorizadas</p>
+            <ul>
+              <li>Encurtar o tempo até o primeiro valor aumenta a retenção em D7</li>
+              <li>Unificar as duas features reduz tickets de suporte</li>
+            </ul>`
+        },
+        {
+          tag: "PROMPT", title: "Prompt de refinamento de spec", teaser: "O template que gera → critica → refina com critério.",
+          body: `<span class="artifact-tag">PROMPT</span><h3>Prompt de refinamento de spec</h3>
+            <p class="m-section">Estrutura</p>
+            <pre>Contexto: [produto, usuário, objetivo de negócio]
+Tarefa: gere uma spec com história, critérios de aceite e edge cases.
+Restrições: [técnicas e de negócio]
+Auto-crítica: aponte ambiguidades, riscos e o que falta.
+Refino: reescreva cobrindo os edge cases mais prováveis.</pre>
+            <p class="m-section">Por que funciona</p>
+            <p>O loop gerar → criticar → refinar tira a IA da resposta genérica e aproxima do que o time consegue executar.</p>`
+        }
+      ];
+
+      const grid = document.querySelector('[data-artifacts]');
+      const modal = document.querySelector('[data-modal]');
+      const modalBody = document.querySelector('[data-modal-body]');
+      if (!grid || !modal || !modalBody) return;
+
+      artifacts.forEach(function (a, i) {
+        const card = document.createElement('button');
+        card.type = 'button';
+        card.className = 'artifact-card-mini';
+        card.innerHTML =
+          '<span class="artifact-tag">' + a.tag + '</span>' +
+          '<strong>' + a.title + '</strong>' +
+          '<p>' + a.teaser + '</p>' +
+          '<span class="artifact-open">Ver completo &rarr;</span>';
+        card.addEventListener('click', function () { openModal(i); });
+        grid.appendChild(card);
+      });
+
+      function openModal(i) {
+        modalBody.innerHTML = artifacts[i].body;
+        modal.hidden = false;
+        document.body.style.overflow = 'hidden';
+      }
+      function closeModal() {
+        modal.hidden = true;
+        document.body.style.overflow = '';
+      }
+      modal.querySelectorAll('[data-modal-close]').forEach(function (el) {
+        el.addEventListener('click', closeModal);
+      });
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape' && !modal.hidden) closeModal();
+      });
     })();
   </script>
 </body>
