@@ -1325,6 +1325,8 @@
     .onda-price { font-weight: 900; color: var(--ink); }
     .onda.is-current { border-color: var(--accent); background: #fff3ee; }
     .onda.is-current .onda-price { color: var(--accent); }
+    .onda.is-soldout { opacity: 0.5; }
+    .onda.is-soldout .onda-price { text-decoration: line-through; }
     .offer .onda-note { margin-top: 2px; font-size: 0.8rem; color: var(--muted); }
 
     .intro-author-highlight {
@@ -1577,9 +1579,9 @@
           <span class="new">R$ 297</span>
         </div>
         <div class="onda-ladder" aria-label="Ondas de preço">
-          <div class="onda is-current"><span class="onda-name">Onda 1 &middot; agora</span><span class="onda-price">R$ 297</span></div>
-          <div class="onda"><span class="onda-name">Onda 2</span><span class="onda-price">R$ 397</span></div>
-          <div class="onda"><span class="onda-name">Valor cheio</span><span class="onda-price">R$ 497</span></div>
+          <div class="onda is-current" data-onda="1"><span class="onda-name">Onda 1 &middot; agora</span><span class="onda-price">R$ 297</span></div>
+          <div class="onda" data-onda="2"><span class="onda-name">Onda 2</span><span class="onda-price">R$ 397</span></div>
+          <div class="onda" data-onda="3"><span class="onda-name">Valor cheio</span><span class="onda-price">R$ 497</span></div>
         </div>
         <p class="onda-note">O preço sobe a cada onda. Você está na Onda 1.</p>
         <p>Curso completo + comunidade + certificado por entrega do projeto final.</p>
@@ -2032,44 +2034,54 @@
         return MIN_SPOTS + Math.round(ratio * (START_SPOTS - MIN_SPOTS));
       }
 
-      // Hide the promotional price and show the normal R$ 497 everywhere.
+      // Virada de lote: a Onda 1 esgota e a Onda 2 (R$ 397) passa a ser a atual e comprável.
       function applyNormalPricing() {
         const newPrice = document.querySelector(".offer .new");
-        const oldPrice = document.querySelector(".offer .old");
         if (newPrice) newPrice.textContent = "R$ 397";
-        if (oldPrice) oldPrice.style.display = "none";
-        const heroCta = document.querySelector(".hero-actions .btn-primary");
-        if (heroCta) {
-          heroCta.textContent = "Entrar na lista de espera";
-          heroCta.setAttribute("href", "#lista");
+
+        const pill = document.querySelector(".offer .pill");
+        if (pill) pill.textContent = "Onda 2 de validação";
+
+        const o1 = document.querySelector('[data-onda="1"]');
+        const o2 = document.querySelector('[data-onda="2"]');
+        if (o1) {
+          o1.classList.remove("is-current");
+          o1.classList.add("is-soldout");
+          const n1 = o1.querySelector(".onda-name");
+          if (n1) n1.innerHTML = "Onda 1 &middot; esgotada";
         }
+        if (o2) {
+          o2.classList.add("is-current");
+          const n2 = o2.querySelector(".onda-name");
+          if (n2) n2.innerHTML = "Onda 2 &middot; agora";
+        }
+
         const waveChip = document.querySelector(".wave-chip");
         if (waveChip) {
-          waveChip.innerHTML = 'Onda 2 &middot; <strong>R$ 397</strong> &middot; o preço subiu';
+          waveChip.innerHTML = 'Onda 2 &middot; <strong>R$ 397</strong> &middot; sobe para R$ 497';
         }
         const finalLead = document.querySelector(".final p");
         if (finalLead) {
-          finalLead.textContent = "Onda 1 encerrada. O preço atual é o da Onda 2: R$ 397.";
+          finalLead.textContent = "Onda 1 esgotada. Você está na Onda 2: R$ 397 (sobe para R$ 497).";
         }
       }
 
       function renderExpired() {
-        if (mainNode) mainNode.textContent = "Onda 1 encerrada";
-        if (finalNode) finalNode.textContent = "00:00";
-        if (ctaButton) {
-          ctaButton.textContent = "Entrar na lista da próxima onda";
-          ctaButton.setAttribute("href", "#lista");
-        }
+        // Onda 1 acabou: vira lote (Onda 2). A oferta NÃO encerra.
         applyNormalPricing();
-        if (spotsBox) spotsBox.textContent = "Vagas desta janela esgotadas.";
+        const cdBox = document.querySelector(".countdown-box");
+        if (cdBox) cdBox.style.display = "none";
+        const finalTimer = document.querySelector(".final-timer");
+        if (finalTimer) finalTimer.style.display = "none";
+        if (spotsBox) spotsBox.innerHTML = "Onda 1 esgotada &middot; vagas da Onda 2 abertas.";
         if (offerBox && !offerBox.querySelector("[data-lock-note]")) {
-          const warning = document.createElement("p");
-          warning.setAttribute("data-lock-note", "");
-          warning.style.marginTop = "10px";
-          warning.style.fontWeight = "800";
-          warning.style.color = "#6d2b1c";
-          warning.textContent = "A Onda 1 encerrou para você. O preço de R$ 297 não volta — agora vale o da próxima onda.";
-          offerBox.appendChild(warning);
+          const note = document.createElement("p");
+          note.setAttribute("data-lock-note", "");
+          note.style.marginTop = "10px";
+          note.style.fontWeight = "800";
+          note.style.color = "#6d2b1c";
+          note.textContent = "A Onda 1 esgotou. Garanta a Onda 2 a R$ 397 antes de subir para R$ 497.";
+          offerBox.appendChild(note);
         }
       }
 
@@ -2098,16 +2110,10 @@
       const now = Date.now();
       const lockUntil = read(lockKey);
 
-      // Still inside the lock window -> keep the promo hidden, no countdown.
-      if (lockUntil !== null && lockUntil > now) {
+      // Once Onda 1 ended for this visitor, stay on Onda 2 (price never drops back).
+      if (lockUntil !== null) {
         renderExpired();
         return;
-      }
-
-      // Lock has elapsed -> reopen a fresh promotional window.
-      if (lockUntil !== null) {
-        localStorage.removeItem(lockKey);
-        localStorage.removeItem(deadlineKey);
       }
 
       let deadline = read(deadlineKey);
