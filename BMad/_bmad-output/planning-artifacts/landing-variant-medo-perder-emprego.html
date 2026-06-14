@@ -1554,6 +1554,8 @@
     .doc-status.p3 { background: #eee7e1; color: #6f645f; }
     .doc-status.ok { background: var(--trust-soft); color: var(--trust-deep); }
 
+    .doc-foot { margin-top: 18px; padding-top: 12px; border-top: 1px dashed var(--line); font-size: 0.8rem; color: var(--muted); font-style: italic; }
+
     @media (max-width: 980px) {
       .hero,
       .two-col,
@@ -2427,114 +2429,200 @@
     (function () {
       const artifacts = [
         {
-          tag: "PRD", title: "PRD — Checkout em 1 clique", teaser: "PRD completo: problema, métricas, escopo, critérios, riscos e lançamento.",
-          body: `<div class="doc-head"><span class="artifact-tag">PRD</span><div><h3>Checkout em 1 clique</h3><span class="doc-meta">Produto: Pagamentos &middot; Autor: PM + IA &middot; v1 &middot; Status: Em refino</span></div></div>
-            <p class="m-section">TL;DR</p>
-            <p>Reduzir o abandono no pagamento permitindo que clientes recorrentes finalizem em uma única ação, usando dados já salvos.</p>
-            <p class="m-section">Problema &amp; evidência</p>
-            <p>38% dos abandonos acontecem na etapa de pagamento; entrevistas e session replays apontam a digitação repetida de cartão/endereço como principal fricção.</p>
-            <p class="m-section">Objetivo &amp; métricas</p>
-            <table class="doc-table"><thead><tr><th>Tipo</th><th>Métrica</th><th>Alvo</th></tr></thead><tbody>
-              <tr><td>North star</td><td>Conversão no pagamento</td><td>+8 a 12 p.p.</td></tr>
-              <tr><td>Suporte</td><td>Tempo de finalização</td><td>-40%</td></tr>
-              <tr><td>Guardrail</td><td>Chargeback</td><td>Sem aumento</td></tr>
-            </tbody></table>
-            <p class="m-section">Escopo</p>
-            <p><strong>Entra:</strong> 1 clique para quem tem cartão+endereço salvos, retry inline, confirmação com resumo.<br><strong>Não entra:</strong> parcelamento custom, split de pagamento, novos meios.</p>
-            <p class="m-section">Critérios de aceite</p>
+          tag: "PRD", title: "PRD — Checkout em 1 clique", teaser: "PRD completo: problema, métricas com baseline, escopo, requisitos, NFRs, riscos, telemetria e rollout.",
+          body: `<div class="doc-head"><span class="artifact-tag">PRD</span><div><h3>Checkout em 1 clique</h3><span class="doc-meta">Produto: Pagamentos &middot; Autor: PM + IA &middot; v1.2 &middot; Status: Em refino &middot; Stakeholders: Eng, Design, Risco, Growth</span></div></div>
+            <p class="m-section">Resumo executivo</p>
+            <p>Clientes recorrentes abandonam o pagamento ao reencontrar formulários longos. Vamos permitir finalizar em uma única ação com dados já salvos, reduzindo abandono e tempo de checkout, sem aumentar risco de fraude.</p>
+            <p class="m-section">Contexto &amp; problema</p>
             <ul>
-              <li><strong>Dado</strong> cartão padrão, <strong>quando</strong> toca "Comprar em 1 clique", <strong>então</strong> cria o pedido sem etapas extras.</li>
-              <li>Opção de trocar cartão/endereço antes de confirmar.</li>
-              <li>Falha de pagamento permite novo try sem perder o carrinho.</li>
+              <li><strong>38%</strong> dos abandonos ocorrem na etapa de pagamento (analytics, últimos 90 dias).</li>
+              <li>Session replays mostram a reentrada manual de cartão e endereço como principal ponto de desistência.</li>
+              <li>Feedback aberto: "comprar de novo dá preguiça por causa do cadastro".</li>
             </ul>
+            <p class="m-section">Por que agora</p>
+            <p>A tokenização de cartão já está disponível na plataforma e a meta trimestral de conversão está sob pressão &mdash; janela ideal para um ganho de baixo esforço e alto impacto.</p>
+            <p class="m-section">Objetivo &amp; métricas</p>
+            <table class="doc-table"><thead><tr><th>Tipo</th><th>Métrica</th><th>Baseline</th><th>Alvo</th></tr></thead><tbody>
+              <tr><td>North star</td><td>Conversão no pagamento</td><td>62%</td><td>+8 a 12 p.p.</td></tr>
+              <tr><td>Suporte</td><td>Tempo de finalização</td><td>~90s</td><td>-40%</td></tr>
+              <tr><td>Suporte</td><td>Recompra em 30d</td><td>21%</td><td>+3 p.p.</td></tr>
+              <tr><td>Guardrail</td><td>Chargeback</td><td>0,6%</td><td>Sem aumento</td></tr>
+              <tr><td>Guardrail</td><td>Erro de pagamento</td><td>2,1%</td><td>Sem aumento</td></tr>
+            </tbody></table>
+            <p class="m-section">Não-objetivos</p>
+            <p>Não vamos resolver parcelamento customizado, split de pagamento nem adicionar novos meios de pagamento neste ciclo.</p>
+            <p class="m-section">Usuário &amp; personas</p>
+            <ul>
+              <li><strong>Recorrente fiel</strong> &mdash; compra 2x+/mês, tem cartão e endereço salvos, valoriza rapidez.</li>
+              <li><strong>Recorrente ocasional</strong> &mdash; compra esporádica, pode ter dados desatualizados (ex.: cartão expirado).</li>
+            </ul>
+            <p class="m-section">Jobs to be done</p>
+            <ul>
+              <li>"Quando já comprei antes, quero recomprar sem refazer cadastro, para não perder tempo."</li>
+              <li>"Quando der erro no pagamento, quero corrigir sem perder o carrinho."</li>
+            </ul>
+            <p class="m-section">Escopo</p>
+            <p><strong>Entra:</strong> botão de 1 clique para quem tem cartão+endereço padrão; retry inline; confirmação com resumo; desfazer em 5s.<br><strong>Não entra:</strong> parcelamento custom, split, novos meios, edição de cadastro dentro do fluxo.</p>
+            <p class="m-section">Requisitos / histórias</p>
+            <ol>
+              <li>Exibir "Comprar em 1 clique" quando houver cartão+endereço padrão.</li>
+              <li>Criar pedido em uma ação, com confirmação e resumo.</li>
+              <li>Permitir trocar cartão/endereço antes de confirmar.</li>
+              <li>Tratar falha de pagamento com retry inline.</li>
+              <li>Registrar telemetria de cada etapa.</li>
+            </ol>
+            <p class="m-section">Critérios de aceite (história 2)</p>
+            <ul>
+              <li><strong>Dado</strong> cliente com cartão padrão válido, <strong>quando</strong> toca "Comprar em 1 clique", <strong>então</strong> o pedido é criado sem etapas extras e a confirmação aparece em até 2s.</li>
+              <li><strong>Dado</strong> pagamento recusado, <strong>quando</strong> o erro retorna, <strong>então</strong> o carrinho é preservado e um retry é oferecido na mesma tela.</li>
+              <li><strong>Dado</strong> confirmação, <strong>então</strong> mostra itens, valor total, cartão mascarado e endereço.</li>
+            </ul>
+            <p class="m-section">Fluxos &amp; estados</p>
+            <p><strong>Happy path:</strong> ver botão &rarr; confirmar &rarr; sucesso. <strong>Estados de erro:</strong> recusa de pagamento, timeout do gateway, item sem estoque, cartão expirado.</p>
             <p class="m-section">Edge cases</p>
             <ul>
-              <li>Cartão expirado &rarr; atualização e retorno ao checkout.</li>
-              <li>Sem dados salvos &rarr; fluxo padrão (botão oculto).</li>
-              <li>Estoque esgotado entre carrinho e clique &rarr; bloqueia e avisa.</li>
+              <li>Cartão expirado &rarr; CTA de atualização e retorno ao checkout.</li>
+              <li>Sem cartão/endereço salvo &rarr; botão oculto, fluxo padrão.</li>
+              <li>Estoque esgotado entre carrinho e clique &rarr; bloqueia e avisa o item.</li>
+              <li>Cupom/promoção aplicada precisa ser respeitada no 1 clique.</li>
+              <li>Múltiplos endereços &rarr; usa o padrão, com opção de trocar.</li>
             </ul>
+            <p class="m-section">Requisitos não-funcionais</p>
+            <ul>
+              <li><strong>Performance:</strong> criação do pedido &lt; 2s no p95.</li>
+              <li><strong>Segurança:</strong> tokenização PCI, sem armazenar PAN; step-up auth por risco.</li>
+              <li><strong>Acessibilidade:</strong> foco visível, leitura por screen reader, contraste AA.</li>
+            </ul>
+            <p class="m-section">Dependências</p>
+            <p>Gateway de pagamento (tokenização), serviço antifraude, catálogo/estoque em tempo real.</p>
             <p class="m-section">Riscos &amp; mitigação</p>
-            <table class="doc-table"><thead><tr><th>Risco</th><th>Mitigação</th></tr></thead><tbody>
-              <tr><td>Compra acidental</td><td>Resumo + desfazer em 5s</td></tr>
-              <tr><td>Fraude com cartão salvo</td><td>Step-up auth por risco</td></tr>
+            <table class="doc-table"><thead><tr><th>Risco</th><th>Sev.</th><th>Mitigação</th></tr></thead><tbody>
+              <tr><td>Compra acidental</td><td><span class="doc-status p2">Média</span></td><td>Resumo + desfazer em 5s</td></tr>
+              <tr><td>Fraude com cartão salvo</td><td><span class="doc-status p1">Alta</span></td><td>Step-up auth por score de risco</td></tr>
+              <tr><td>Aumento de chargeback</td><td><span class="doc-status p2">Média</span></td><td>Monitor + rollback automático</td></tr>
             </tbody></table>
+            <p class="m-section">Telemetria &amp; eventos</p>
+            <ul>
+              <li>Eventos: <code>one_click_shown</code>, <code>one_click_purchase</code>, <code>one_click_error</code>, <code>one_click_undo</code>.</li>
+              <li>Funil: exibição &rarr; clique &rarr; sucesso/erro; dashboard por coorte de recorrência.</li>
+            </ul>
             <p class="m-section">Plano de lançamento</p>
-            <p>Rollout faseado 5% &rarr; 25% &rarr; 100%, com kill switch e monitor de chargeback/erro.</p>
-            <div class="artifact-meta"><span class="artifact-pill">Prioridade P1</span><span class="artifact-pill">Esforço M</span><span class="artifact-pill">Squad Checkout</span></div>`
+            <p>Rollout 5% &rarr; 25% &rarr; 100% com kill switch. Gatilho de rollback: chargeback &gt; baseline +0,2 p.p. ou erro &gt; baseline +1 p.p.</p>
+            <p class="m-section">Perguntas em aberto</p>
+            <ol>
+              <li>Exigimos step-up auth sempre ou só acima de um score de risco?</li>
+              <li>Mostramos o botão também na página do produto?</li>
+              <li>Janela do "desfazer": 5s ou até o envio para fulfilment?</li>
+            </ol>
+            <div class="doc-foot">Rascunho deste PRD: ~25 min com o método &mdash; vs. meio dia partindo do zero.</div>`
         },
         {
-          tag: "BACKLOG", title: "Backlog priorizado — Onboarding", teaser: "Backlog em tabela: prioridade, esforço, aceite e definição de pronto.",
-          body: `<div class="doc-head"><span class="artifact-tag">BACKLOG</span><div><h3>Backlog priorizado — Onboarding</h3><span class="doc-meta">Épico: Ativação &middot; janela 7 dias &middot; pronto p/ refino</span></div></div>
-            <p class="m-section">Meta</p>
-            <p>Aumentar a ativação (1ª ação de valor) de novos usuários em 7 dias.</p>
+          tag: "BACKLOG", title: "Backlog priorizado — Onboarding", teaser: "Épico completo: meta, histórias em tabela, dependências, riscos, métricas e definição de pronto.",
+          body: `<div class="doc-head"><span class="artifact-tag">BACKLOG</span><div><h3>Backlog priorizado — Onboarding</h3><span class="doc-meta">Épico: Ativação &middot; janela 7 dias &middot; v1 &middot; pronto p/ refino</span></div></div>
+            <p class="m-section">Meta do épico</p>
+            <p>Aumentar a ativação (1ª ação de valor) de novos usuários nos primeiros 7 dias, de 34% para 45%.</p>
+            <p class="m-section">Histórias priorizadas</p>
             <table class="doc-table"><thead><tr><th>História</th><th>Prio</th><th>Esf.</th><th>Aceite (resumo)</th></tr></thead><tbody>
               <tr><td>Setup guiado de boas-vindas</td><td><span class="doc-status p1">P1</span></td><td>M</td><td>Conclui 3 passos e vê o 1º resultado</td></tr>
               <tr><td>Checklist de primeiros passos</td><td><span class="doc-status p1">P1</span></td><td>S</td><td>Progresso visível e persistente</td></tr>
+              <tr><td>Estado vazio com exemplo pronto</td><td><span class="doc-status p1">P1</span></td><td>S</td><td>Usuário age sobre um template em 1 clique</td></tr>
               <tr><td>Tooltips contextuais</td><td><span class="doc-status p2">P2</span></td><td>M</td><td>Aparecem na 1ª vez de cada feature</td></tr>
               <tr><td>Importar dados do app anterior</td><td><span class="doc-status p2">P2</span></td><td>L</td><td>Importa com validação e preview</td></tr>
               <tr><td>E-mail de retomada</td><td><span class="doc-status p3">P3</span></td><td>S</td><td>Dispara após 48h de inatividade</td></tr>
             </tbody></table>
+            <p class="m-section">Sequência sugerida</p>
+            <p>Sprint 1: setup guiado + checklist + estado vazio &middot; Sprint 2: tooltips &middot; Sprint 3: importação &middot; contínuo: e-mail de retomada.</p>
             <p class="m-section">Critério de priorização</p>
-            <p>Impacto na ativação &times; esforço (RICE), validado com o discovery.</p>
+            <p>Impacto na ativação &times; esforço (RICE simplificado), validado com os dados do discovery; P1 = move a métrica e desbloqueia o "aha".</p>
+            <p class="m-section">Dependências</p>
+            <ul><li>Eventos de ativação instrumentados no analytics</li><li>Biblioteca de componentes para os tooltips</li><li>Conector de importação do app anterior</li></ul>
+            <p class="m-section">Riscos</p>
+            <ul><li>Importação subestimada (esforço L) &rarr; spike técnico antes do commit</li><li>Tooltips viram ruído &rarr; limitar a 3 por sessão</li></ul>
+            <p class="m-section">Métricas de sucesso do épico</p>
+            <ul><li>Ativação D7: 34% &rarr; 45%</li><li>Tempo até o 1º valor: -30%</li><li>Conclusão do setup guiado &gt; 60%</li></ul>
             <p class="m-section">Definição de pronto</p>
-            <ul><li>Aceite testado</li><li>Telemetria instrumentada</li><li>Texto revisado e acessível</li></ul>`
+            <ul><li>Critérios de aceite cobertos e testados</li><li>Telemetria instrumentada</li><li>Texto revisado e acessível (AA)</li></ul>
+            <div class="doc-foot">Backlog priorizado em ~20 min com o método &mdash; pronto para o refinamento do squad.</div>`
         },
         {
-          tag: "DISCOVERY", title: "Síntese de 12 entrevistas", teaser: "Método, temas com frequência, citações e hipóteses testáveis.",
-          body: `<div class="doc-head"><span class="artifact-tag">DISCOVERY</span><div><h3>Síntese de 12 entrevistas — Retenção</h3><span class="doc-meta">8 churned &middot; 4 ativos &middot; 30 min cada</span></div></div>
+          tag: "DISCOVERY", title: "Síntese de 12 entrevistas", teaser: "Relatório de discovery: objetivo, método, temas com frequência, citações, oportunidades e próximos passos.",
+          body: `<div class="doc-head"><span class="artifact-tag">DISCOVERY</span><div><h3>Síntese de 12 entrevistas — Retenção</h3><span class="doc-meta">8 churned &middot; 4 ativos &middot; 30 min cada &middot; jun/2026</span></div></div>
+            <p class="m-section">Objetivo da pesquisa</p>
+            <p>Entender por que novos usuários abandonam nas primeiras semanas e onde está a maior alavanca de retenção.</p>
             <p class="m-section">Método</p>
-            <p>Transcrições sintetizadas com IA e revisadas manualmente; codificação por temas.</p>
+            <p>Entrevistas semiestruturadas; transcrições sintetizadas com IA e revisadas manualmente; codificação por temas e contagem de frequência.</p>
+            <p class="m-section">Perguntas-guia</p>
+            <ul><li>O que te fez experimentar o produto?</li><li>Qual foi o primeiro momento de valor &mdash; ou por que não chegou nele?</li><li>O que quase te fez (ou te fez) desistir?</li></ul>
             <p class="m-section">Temas (por frequência)</p>
-            <ul>
-              <li><strong>9/12</strong> &mdash; não percebem valor antes de desistir (tempo até o "aha" alto).</li>
-              <li><strong>7/12</strong> &mdash; confundem duas features parecidas e retrabalham.</li>
-              <li><strong>5/12</strong> &mdash; avançados querem atalhos; iniciantes querem trilho.</li>
-            </ul>
-            <p class="m-section">Citações</p>
-            <p>"Demorei pra entender pra que servia &mdash; desisti antes." &middot; "Achei que as duas eram a mesma coisa."</p>
+            <table class="doc-table"><thead><tr><th>Tema</th><th>Freq.</th><th>Evidência</th></tr></thead><tbody>
+              <tr><td>Tempo até o "aha" alto</td><td>9/12</td><td>"Demorei pra entender pra que servia"</td></tr>
+              <tr><td>Ambiguidade entre 2 features</td><td>7/12</td><td>"Achei que eram a mesma coisa"</td></tr>
+              <tr><td>Iniciantes querem trilho</td><td>5/12</td><td>"Fiquei perdido na tela vazia"</td></tr>
+            </tbody></table>
             <p class="m-section">Dores priorizadas</p>
             <ol><li>Tempo até o primeiro valor</li><li>Ambiguidade entre features</li><li>Falta de trilho para iniciantes</li></ol>
+            <p class="m-section">Oportunidades</p>
+            <ul><li>Encurtar caminho até o 1º resultado (estado vazio com exemplo).</li><li>Unificar/renomear as features confusas.</li><li>Onboarding guiado para iniciantes.</li></ul>
             <p class="m-section">Hipóteses testáveis</p>
             <ul>
-              <li>Reduzir o tempo até o 1º valor aumenta a retenção em D7 &mdash; <em>medir via experimento.</em></li>
+              <li>Reduzir o tempo até o 1º valor aumenta a retenção em D7 &mdash; <em>medir via experimento de onboarding.</em></li>
               <li>Unificar as duas features reduz tickets &mdash; <em>medir via volume de suporte.</em></li>
-            </ul>`
+            </ul>
+            <p class="m-section">Próximos passos</p>
+            <p>Levar a hipótese 1 para discovery de solução e priorizá-la no backlog de onboarding; abrir teste A/B (ver artefato Experimento).</p>
+            <div class="doc-foot">12 transcrições sintetizadas em ~1h com o método &mdash; vs. dias de leitura e tagueamento manual.</div>`
         },
         {
-          tag: "EXPERIMENTO", title: "Teste A/B — Onboarding guiado", teaser: "Hipótese, desenho, amostra/poder e critério de decisão.",
-          body: `<div class="doc-head"><span class="artifact-tag">EXPERIMENTO</span><div><h3>Onboarding guiado — teste A/B</h3><span class="doc-meta">Duração: 3 semanas &middot; Status: Desenhado</span></div></div>
+          tag: "EXPERIMENTO", title: "Teste A/B — Onboarding guiado", teaser: "Plano de experimento: hipótese, desenho, amostra/poder, segmentação, análise e decisão.",
+          body: `<div class="doc-head"><span class="artifact-tag">EXPERIMENTO</span><div><h3>Onboarding guiado — teste A/B</h3><span class="doc-meta">Duração: 3 semanas &middot; v1 &middot; Status: Desenhado</span></div></div>
+            <p class="m-section">Contexto</p>
+            <p>Discovery indicou que o tempo até o 1º valor é a maior dor de retenção. Vamos testar um onboarding guiado contra o atual.</p>
             <p class="m-section">Hipótese</p>
-            <p>Se reduzirmos o tempo até o 1º valor com um setup guiado, a retenção em D7 dos novos usuários aumenta.</p>
+            <p>Se reduzirmos o tempo até o 1º valor com um setup guiado, então a retenção em D7 dos novos usuários aumenta em ao menos 3 p.p.</p>
             <p class="m-section">Desenho</p>
             <table class="doc-table"><thead><tr><th>Item</th><th>Definição</th></tr></thead><tbody>
+              <tr><td>Unidade</td><td>Novo usuário (aleatorização no signup)</td></tr>
               <tr><td>A (controle)</td><td>Onboarding atual</td></tr>
-              <tr><td>B (variante)</td><td>Setup guiado em 3 passos</td></tr>
+              <tr><td>B (variante)</td><td>Setup guiado em 3 passos + estado vazio com exemplo</td></tr>
               <tr><td>Métrica primária</td><td>Retenção D7</td></tr>
+              <tr><td>Secundárias</td><td>Conclusão do setup, tempo até o 1º valor</td></tr>
               <tr><td>Guardrails</td><td>Tickets de suporte, tempo de setup</td></tr>
               <tr><td>Amostra/poder</td><td>~3.000/variante, 80% poder, MDE 3 p.p.</td></tr>
             </tbody></table>
+            <p class="m-section">Segmentação de análise</p>
+            <p>Quebrar por origem (orgânico vs. pago) e por device, para checar efeito heterogêneo.</p>
+            <p class="m-section">Plano de análise</p>
+            <p>Teste de proporções na métrica primária; checar guardrails antes de concluir; sem peeking até o tamanho de amostra previsto.</p>
             <p class="m-section">Critério de decisão</p>
-            <p>Subir se B &ge; +3 p.p. em D7 com significância e sem piora nos guardrails; caso contrário, iterar.</p>`
+            <ul><li><strong>Subir</strong> se B &ge; +3 p.p. em D7 com significância e sem piora nos guardrails.</li><li><strong>Iterar</strong> se efeito positivo porém abaixo do MDE.</li><li><strong>Descartar</strong> se neutro/negativo ou guardrail estourado.</li></ul>
+            <div class="doc-foot">Plano de experimento estruturado em ~20 min com o método.</div>`
         },
         {
-          tag: "EXEC", title: "1-pager de decisão", teaser: "Comunicação executiva: pedido, opções com trade-offs e recomendação.",
-          body: `<div class="doc-head"><span class="artifact-tag">EXEC</span><div><h3>Decisão: priorizar Checkout em 1 clique</h3><span class="doc-meta">1-pager para a liderança &middot; Decisão necessária</span></div></div>
+          tag: "EXEC", title: "1-pager de decisão", teaser: "Comunicação executiva: pedido, contexto, opções com trade-offs, recomendação e plano.",
+          body: `<div class="doc-head"><span class="artifact-tag">EXEC</span><div><h3>Decisão: priorizar Checkout em 1 clique</h3><span class="doc-meta">1-pager para a liderança &middot; Decisão necessária no comitê</span></div></div>
             <p class="m-section">Pedido</p>
-            <p>Aprovar 1 squad por 6 semanas para o Checkout em 1 clique no próximo ciclo.</p>
+            <p>Aprovar a alocação de 1 squad por 6 semanas para o Checkout em 1 clique no próximo ciclo.</p>
             <p class="m-section">Contexto</p>
-            <ul><li>38% dos abandonos estão na etapa de pagamento.</li><li>Fricção principal: digitação repetida de dados.</li><li>Solução de baixo risco, com kill switch.</li></ul>
-            <p class="m-section">Opções</p>
-            <table class="doc-table"><thead><tr><th>Opção</th><th>Esforço</th><th>Impacto</th></tr></thead><tbody>
-              <tr><td><strong>A. 1 clique (recomendada)</strong></td><td>6 sem</td><td>+8 a 12 p.p. de conversão</td></tr>
-              <tr><td>B. Autofill melhorado</td><td>3 sem</td><td>+3 a 5 p.p.</td></tr>
-              <tr><td>C. Não fazer</td><td>&mdash;</td><td>Abandono persiste</td></tr>
+            <ul><li>38% dos abandonos estão na etapa de pagamento.</li><li>Fricção principal: digitação repetida de cartão/endereço.</li><li>Tokenização já disponível &mdash; solução de baixo risco, com kill switch.</li></ul>
+            <p class="m-section">Opções &amp; trade-offs</p>
+            <table class="doc-table"><thead><tr><th>Opção</th><th>Esforço</th><th>Impacto</th><th>Risco</th></tr></thead><tbody>
+              <tr><td><strong>A. 1 clique (recomendada)</strong></td><td>6 sem</td><td>+8 a 12 p.p. conversão</td><td>Baixo (rollout faseado)</td></tr>
+              <tr><td>B. Autofill melhorado</td><td>3 sem</td><td>+3 a 5 p.p.</td><td>Baixo</td></tr>
+              <tr><td>C. Não fazer</td><td>&mdash;</td><td>Abandono persiste</td><td>Custo de oportunidade</td></tr>
             </tbody></table>
-            <p class="m-section">Próximo passo</p>
-            <p>Com o "sim", abrimos discovery de solução e entramos no planning do ciclo.</p>`
+            <p class="m-section">Recomendação</p>
+            <p>Opção A: maior impacto na meta trimestral de conversão, risco controlado por rollout faseado e gatilho de rollback.</p>
+            <p class="m-section">Impacto financeiro estimado</p>
+            <p>+8 p.p. de conversão na etapa equivalem a ~R$ X/mês em receita incremental (modelo conservador).</p>
+            <p class="m-section">Plano &amp; próximo passo</p>
+            <p>Semana 1-2 discovery de solução + design &middot; 3-5 build &middot; 6 rollout. Com o "sim", entramos no planning do ciclo.</p>
+            <div class="doc-foot">1-pager de decisão escrito em ~15 min com o método.</div>`
         },
         {
-          tag: "PROMPT", title: "Prompt de refinamento de spec", teaser: "Template reutilizável: gerar → criticar → refinar, com anti-padrões.",
-          body: `<div class="doc-head"><span class="artifact-tag">PROMPT</span><div><h3>Prompt de refinamento de spec</h3><span class="doc-meta">Reutilizável &middot; funciona em qualquer LLM</span></div></div>
+          tag: "PROMPT", title: "Prompt de refinamento de spec", teaser: "Playbook reutilizável: template, exemplo, variações, checklist de qualidade e anti-padrões.",
+          body: `<div class="doc-head"><span class="artifact-tag">PROMPT</span><div><h3>Prompt de refinamento de spec</h3><span class="doc-meta">Playbook reutilizável &middot; funciona em qualquer LLM</span></div></div>
+            <p class="m-section">Quando usar</p>
+            <p>Para transformar notas/transcrição bruta em uma spec executável, com o loop gerar &rarr; criticar &rarr; refinar.</p>
             <p class="m-section">Template</p>
             <pre>PAPEL: você é um PM sênior, cético e orientado a execução.
 CONTEXTO: [produto, usuário, objetivo de negócio, restrições]
@@ -2548,14 +2636,19 @@ SAÍDA: markdown, direto ao ponto.</pre>
             <p>Cole a transcrição de uma call de discovery no campo ENTRADA e rode. A saída já vem em formato de spec, pronta para refino no squad.</p>
             <p class="m-section">Variações</p>
             <ul>
-              <li>Trocar a TAREFA por "gere só os critérios de aceite com edge cases".</li>
-              <li>Adicionar "compare 2 abordagens e recomende uma, com trade-offs".</li>
+              <li>Trocar a TAREFA por "gere só os critérios de aceite com edge cases" (foco em QA).</li>
+              <li>Adicionar "compare 2 abordagens e recomende uma, com trade-offs" (decisão).</li>
+              <li>Adicionar "gere um 1-pager executivo a partir desta spec" (comunicação).</li>
             </ul>
+            <p class="m-section">Checklist de qualidade</p>
+            <ul><li>Métrica-alvo está clara e mensurável?</li><li>Edge cases cobrem erro, vazio e limites?</li><li>O que está fora de escopo está explícito?</li><li>Um eng/design conseguiria estimar sem voltar a perguntar?</li></ul>
             <p class="m-section">Anti-padrões</p>
             <ul>
               <li>Pedir spec sem contexto/restrições &rarr; saída genérica.</li>
               <li>Aceitar a 1ª versão sem o passo de auto-crítica.</li>
-            </ul>`
+              <li>Deixar a IA decidir prioridade no seu lugar.</li>
+            </ul>
+            <div class="doc-foot">Playbook que você reaplica toda semana &mdash; o motor do método.</div>`
         }
       ];
 
