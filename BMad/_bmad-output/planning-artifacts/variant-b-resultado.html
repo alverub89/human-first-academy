@@ -1186,11 +1186,21 @@
       font-weight: 900;
     }
 
+    .metrics-block { margin-top: 18px; padding-top: 16px; border-top: 1px dashed var(--line); }
+
+    .metrics-eyebrow {
+      margin: 0 0 10px;
+      font-size: 0.78rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--accent-deep);
+    }
+
     .metrics {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
       gap: 12px;
-      margin-bottom: 16px;
     }
 
     .metric {
@@ -1198,16 +1208,29 @@
       border-radius: 14px;
       background: #fff;
       padding: 16px;
+      text-align: center;
     }
 
-    .metric-row { display: flex; align-items: center; gap: 12px; }
-    .metric-before, .metric-after { display: grid; gap: 2px; }
+    .metric-row { display: flex; align-items: center; justify-content: center; gap: 22px; }
     .m-tag { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--muted); font-weight: 800; }
-    .metric-before .m-val { color: #8f3c26; text-decoration: line-through; font-weight: 800; }
-    .metric-after .m-val { color: var(--trust-deep); font-weight: 900; font-size: 1.3rem; }
-    .metric-arrow { color: var(--accent); font-weight: 900; font-size: 1.2rem; }
+    .metric-values { display: flex; align-items: center; justify-content: center; gap: 10px; margin-top: 6px; }
+    .m-val { font-size: 1.05rem; font-weight: 800; }
+    .m-val-before { color: #8f3c26; text-decoration: line-through; }
+    .m-val-after { color: var(--trust-deep); font-weight: 900; font-size: 1.35rem; }
+    .metric-arrow {
+      display: inline-grid;
+      place-items: center;
+      flex: 0 0 auto;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent), var(--accent-deep));
+      color: #fff;
+      font-weight: 900;
+      font-size: 0.92rem;
+    }
     .metric-label { margin-top: 10px; color: var(--muted); font-size: 0.9rem; font-weight: 700; }
-    .metric-note { grid-column: 1 / -1; margin: 4px 0 0; color: var(--muted); font-size: 0.82rem; font-style: italic; }
+    .metric-note { grid-column: 1 / -1; margin: 4px 0 0; color: var(--muted); font-size: 0.82rem; font-style: italic; text-align: center; }
 
     @media (max-width: 760px) {
       .intro-author-creds { margin-left: 0; width: 100%; }
@@ -1790,7 +1813,10 @@
         <span class="flow-arrow" aria-hidden="true">&rarr;</span>
         <div class="flow-step"><span class="flow-ic">3</span><strong>Decidir</strong><p>Você avalia a saída com uma rubrica, expõe as inferências e bate o martelo. A decisão continua sua.</p></div>
       </div>
-      <div class="metrics" data-metrics hidden></div>
+      <div class="metrics-block" data-metrics hidden>
+        <p class="metrics-eyebrow">Resultados observados</p>
+        <div class="metrics" data-metrics-grid></div>
+      </div>
     </section>
 
     <div class="section-break" aria-hidden="true"></div>
@@ -2185,23 +2211,25 @@
         { label: "Ciclo de discovery de produto", before: "meses", after: "dias" },
       ];
       const box = document.querySelector('[data-metrics]');
-      if (!box || !metrics.length) return;
+      const grid = document.querySelector('[data-metrics-grid]');
+      if (!box || !grid || !metrics.length) return;
       metrics.forEach(function (m) {
         const el = document.createElement('div');
         el.className = 'metric';
         el.innerHTML =
-          '<div class="metric-row">' +
-            '<div class="metric-before"><span class="m-tag">Antes</span><span class="m-val">' + m.before + '</span></div>' +
-            '<span class="metric-arrow">&rarr;</span>' +
-            '<div class="metric-after"><span class="m-tag">Depois</span><span class="m-val">' + m.after + '</span></div>' +
+          '<div class="metric-row"><span class="m-tag">Antes</span><span class="m-tag">Depois</span></div>' +
+          '<div class="metric-values">' +
+            '<span class="m-val m-val-before">' + m.before + '</span>' +
+            '<span class="metric-arrow" aria-hidden="true">&rarr;</span>' +
+            '<span class="m-val m-val-after">' + m.after + '</span>' +
           '</div>' +
           '<div class="metric-label">' + (m.label || '') + '</div>';
-        box.appendChild(el);
+        grid.appendChild(el);
       });
       const note = document.createElement('p');
       note.className = 'metric-note';
       note.textContent = 'Ganhos observados no time do instrutor aplicando IA no fluxo de produto.';
-      box.appendChild(note);
+      grid.appendChild(note);
       box.hidden = false;
     })();
 
