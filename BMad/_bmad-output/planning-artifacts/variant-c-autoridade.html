@@ -432,6 +432,11 @@
       gap: 6px;
     }
 
+    .module-detail { margin-top: 10px; }
+    .module-detail summary { cursor: pointer; font-size: 0.88rem; color: var(--muted); }
+    .lesson-list { margin: 8px 0 0; padding-left: 18px; color: var(--muted); font-size: 0.92rem; }
+    .lesson-list li { margin-bottom: 4px; }
+
     .trust-strip {
       margin-top: 10px;
       border-top: 1px solid var(--line);
@@ -1684,7 +1689,7 @@
   <div class="topbar">
     <div class="topbar-inner">
       <div class="wave-chip">PM Moderno &middot; o trabalho de PM com IA dentro</div>
-      <a class="btn btn-primary" href="[LINK_CHECKOUT]">Quero começar agora</a>
+      <a class="btn btn-primary" href="https://pay.hotmart.com/H106805141N">Quero começar agora</a>
     </div>
   </div>
 
@@ -1695,7 +1700,7 @@
         <h1>Depois de quase 20 anos em produto, ficou claro onde a IA ajuda e onde o PM decide.</h1>
         <p class="sub">PM Moderno é o método que uso para colocar IA no fluxo de produto sem perder critério. Direto, prático, sem promessa de mágica.</p>
         <div class="hero-actions">
-          <a class="btn btn-primary" href="[LINK_CHECKOUT]">Quero começar agora</a>
+          <a class="btn btn-primary" href="https://pay.hotmart.com/H106805141N">Quero começar agora</a>
           <a class="btn btn-ghost" href="#metodo">Conhecer o método 3D</a>
         </div>
       </div>
@@ -1718,13 +1723,13 @@
           <p>O método 3D, os quatro artefatos e o projeto final avaliado por rubrica.</p>
           <ul class="includes">
             <li>15 aulas em vídeo (cerca de 4h), perto de 12h com a prática</li>
-            <li>Assíncrono, no seu ritmo</li>
+            <li>Sem aula ao vivo obrigatória. Liberação semanal, para você aplicar cada artefato antes de avançar</li>
             <li>Quatro artefatos proprietários para usar já no trabalho</li>
             <li>Projeto final avaliado por rubrica</li>
             <li>Comunidade fechada de gerentes de produto</li>
           </ul>
           <div style="margin-top:12px; display:grid; gap:8px;">
-            <a class="btn btn-primary" href="[LINK_CHECKOUT]" style="text-align:center;">Quero começar agora</a>
+            <a class="btn btn-primary" href="https://pay.hotmart.com/H106805141N" style="text-align:center;">Quero começar agora</a>
             <span style="font-size:0.84rem; color:var(--muted);">Pagamento e acesso pela Hotmart</span>
           </div>
           <div class="guarantee"><span class="guarantee-ic" aria-hidden="true">&#10003;</span> Garantia de 7 dias. Se não for para você, devolvemos.</div>
@@ -1738,6 +1743,14 @@
       <h2>Como funciona a entrega</h2>
       <p class="section-lead">A turma fundadora começa em 25 de julho. [CADENCIA], novas aulas entram na área de membros até as 15 estarem no ar. Você acompanha desde a primeira e aplica o método no trabalho enquanto o curso é liberado.</p>
       <div class="guarantee"><span class="guarantee-ic" aria-hidden="true">&#10003;</span> Garantia de 7 dias. Se não for para você, devolvemos.</div>
+    </section>
+
+    <div class="section-break" aria-hidden="true"></div>
+
+    <section class="section motion-reveal" id="prova-social">
+      <h2>Por que essa página não tem depoimento</h2>
+      <p class="section-lead">PM Moderno é um curso novo. Não existe uma turma de alunos satisfeitos para mostrar, porque essa é a primeira turma. É por isso que ela se chama turma fundadora: preço de fundador (R$ 297) e influência real sobre o que o curso vira, incluindo espaço para pedir ajuste de ênfase em algum módulo antes da próxima turma fechar.</p>
+      <p>Assim que a turma fundadora terminar o projeto final, esta seção passa a trazer depoimentos e artefatos reais aplicados no trabalho, com nome e cargo de quem autorizar a publicação.</p>
     </section>
 
     <section class="intro-author" aria-label="Quem conduz">
@@ -1777,6 +1790,7 @@
         <span class="flow-arrow" aria-hidden="true">&rarr;</span>
         <div class="flow-step"><span class="flow-ic">3</span><strong>Decidir</strong><p>Você avalia a saída com uma rubrica, expõe as inferências e bate o martelo. A decisão continua sua.</p></div>
       </div>
+      <div class="metrics" data-metrics hidden></div>
     </section>
 
     <div class="section-break" aria-hidden="true"></div>
@@ -1787,6 +1801,17 @@
       <div class="artifacts">
         <div class="artifacts-label">Os artefatos do método. Clique para ver completo.</div>
         <div class="artifacts-grid" data-artifacts></div>
+      </div>
+      <div class="module" style="margin-top:16px;">
+        <div class="doc-head"><span class="artifact-tag">CONTEXTO</span><div><h3>Contrato de Contexto</h3><span class="doc-meta">Exemplo preenchido &middot; ilustrativo</span></div></div>
+        <table class="doc-table"><thead><tr><th>Campo</th><th>Preenchido</th></tr></thead><tbody>
+          <tr><td>Objetivo</td><td>Reduzir de 9 para 3 dias o tempo entre "ideia validada" e "spec pronta para dev"</td></tr>
+          <tr><td>Usuário</td><td>Dono de clínica pequena, agenda no papel ou planilha, sem tempo para configurar sistema complexo</td></tr>
+          <tr><td>Fontes de verdade</td><td>Pesquisa com 12 clínicas, dashboard de churn do trimestre, doc de arquitetura atual</td></tr>
+          <tr><td>Regras de negócio</td><td>Cancelamento com menos de 2h de antecedência não gera reembolso automático</td></tr>
+          <tr><td>Fora de escopo</td><td>Pagamento recorrente e telemedicina ficam para a v2</td></tr>
+        </tbody></table>
+        <div class="doc-foot">Este é o formato real que você preenche na Aula 6, com o seu produto no lugar do exemplo.</div>
       </div>
     </section>
 
@@ -1820,22 +1845,62 @@
         <article class="module motion-reveal motion-delay-1">
           <h3>1. O trabalho de PM com IA dentro</h3>
           <ul><li>O que mudou de verdade na função</li><li>Onde o julgamento humano fica mais valioso</li></ul>
+          <details class="module-detail">
+            <summary>Ver as 2 aulas deste módulo</summary>
+            <ol class="lesson-list">
+              <li>Aula 1 &middot; O que a IA já resolve sozinha, e o que sobra para o PM decidir</li>
+              <li>Aula 2 &middot; Onde o julgamento humano vira vantagem, não gargalo</li>
+            </ol>
+          </details>
         </article>
         <article class="module motion-reveal motion-delay-2">
           <h3>2. Definir</h3>
           <ul><li>Enquadrar problema e resultado antes da IA</li><li>Reconhecer quando a saída vai sair genérica</li></ul>
+          <details class="module-detail">
+            <summary>Ver as 3 aulas deste módulo</summary>
+            <ol class="lesson-list">
+              <li>Aula 3 &middot; Enquadrar o problema antes de abrir qualquer ferramenta de IA</li>
+              <li>Aula 4 &middot; Definir o resultado esperado em critério verificável</li>
+              <li>Aula 5 &middot; Reconhecer, em segundos, quando uma saída vai sair genérica</li>
+            </ol>
+          </details>
         </article>
         <article class="module motion-reveal motion-delay-1">
           <h3>3. Instrumentar</h3>
           <ul><li>Montar o Contrato de Contexto e o Contrato de Execução</li><li>Tirar o contexto da cabeça das pessoas</li></ul>
+          <details class="module-detail">
+            <summary>Ver as 4 aulas deste módulo</summary>
+            <ol class="lesson-list">
+              <li>Aula 6 &middot; Montar o Contrato de Contexto do seu produto</li>
+              <li>Aula 7 &middot; Montar o Contrato de Execução: papel, tarefa, limites e formato</li>
+              <li>Aula 8 &middot; Tirar o contexto da cabeça das pessoas e deixar reutilizável</li>
+              <li>Aula 9 &middot; Aplicar os dois contratos num caso real do seu trabalho</li>
+            </ol>
+          </details>
         </article>
         <article class="module motion-reveal motion-delay-2">
           <h3>4. Decidir</h3>
           <ul><li>Curar a saída com a Rubrica de Curadoria</li><li>Expor o que a IA assumiu com o Checklist de Inferência</li></ul>
+          <details class="module-detail">
+            <summary>Ver as 4 aulas deste módulo</summary>
+            <ol class="lesson-list">
+              <li>Aula 10 &middot; Construir a Rubrica de Curadoria por dimensão</li>
+              <li>Aula 11 &middot; Usar o Checklist de Inferência para expor suposições escondidas</li>
+              <li>Aula 12 &middot; Aprovar (ou não) com critério defensável diante da liderança</li>
+              <li>Aula 13 &middot; Erros comuns de curadoria e como não repeti-los</li>
+            </ol>
+          </details>
         </article>
         <article class="module motion-reveal motion-delay-1">
           <h3>5. Projeto final</h3>
           <ul><li>Aplicar o Método 3D num caso real do seu contexto</li><li>Avaliação por rubrica, com devolutiva</li></ul>
+          <details class="module-detail">
+            <summary>Ver as 2 aulas deste módulo</summary>
+            <ol class="lesson-list">
+              <li>Aula 14 &middot; Aplicar o Método 3D de ponta a ponta no seu caso real</li>
+              <li>Aula 15 &middot; Avaliação por rubrica e devolutiva</li>
+            </ol>
+          </details>
         </article>
       </div>
     </section>
@@ -1905,6 +1970,7 @@
       <details>
         <summary>Por que R$ 297 e não R$ 97?</summary>
         <p>Você leva 15 aulas com prática, quatro artefatos para usar no trabalho e um projeto avaliado por rubrica. O preço cheio será R$ 497, e R$ 297 é a condição da turma fundadora, a primeira do curso. Depois dela, o preço passa a R$ 497.</p>
+        <p>Uma hora avulsa de consultoria de produto costuma custar mais que R$ 297. Aqui você leva 15 aulas, quatro artefatos reutilizáveis em qualquer projeto futuro e um projeto avaliado por rubrica, pelo mesmo valor.</p>
       </details>
       <details>
         <summary>Vou precisar saber programar?</summary>
@@ -1935,7 +2001,7 @@
     <section class="final motion-reveal">
       <h2>Recoloque julgamento, contexto e decisão no centro do seu trabalho.</h2>
       <p>Com a IA cuidando do rascunho, sobra o que sempre definiu um bom PM. PM Moderno te dá o método 3D e os quatro artefatos para conduzir isso com critério.</p>
-      <a class="btn btn-primary" href="[LINK_CHECKOUT]">Quero começar agora</a>
+      <a class="btn btn-primary" href="https://pay.hotmart.com/H106805141N">Quero começar agora</a>
       <div style="margin-top:10px;"><small>15 aulas, projeto avaliado por rubrica, garantia de 7 dias.</small></div>
     </section>
   </main>
