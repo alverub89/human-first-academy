@@ -10,6 +10,24 @@
 
     gtag('config', 'AW-18337107719');
   </script>
+  <!-- Event snippet for Compra conversion page -->
+  <script>
+    function gtag_report_conversion(url) {
+      var callback = function () {
+        if (typeof(url) != 'undefined') {
+          window.location = url;
+        }
+      };
+      gtag('event', 'conversion', {
+          'send_to': 'AW-18337107719/YzcqCOD0ydMcEIee6KdE',
+          'value': 1.0,
+          'currency': 'BRL',
+          'transaction_id': '',
+          'event_callback': callback
+      });
+      return false;
+    }
+  </script>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>PM Moderno: o trabalho do gerente de produto com IA dentro</title>
@@ -1721,7 +1739,7 @@
   <div class="topbar">
     <div class="topbar-inner">
       <div class="wave-chip">PM Moderno &middot; o trabalho de PM com IA dentro</div>
-      <a class="btn btn-primary" href="https://pay.hotmart.com/H106805141N">Quero começar agora</a>
+      <a class="btn btn-primary" href="https://pay.hotmart.com/H106805141N" onclick="return gtag_report_conversion('https://pay.hotmart.com/H106805141N');">Quero começar agora</a>
     </div>
   </div>
 
@@ -1732,7 +1750,7 @@
         <h1>Specs em horas, discovery em dias, e uma régua de qualidade que o time confia.</h1>
         <p class="sub">PM Moderno te dá o método 3D e os quatro artefatos para entregar mais rápido sem abrir mão de julgamento. O ganho aparece já na primeira aula prática.</p>
         <div class="hero-actions">
-          <a class="btn btn-primary" href="https://pay.hotmart.com/H106805141N">Quero começar agora</a>
+          <a class="btn btn-primary" href="https://pay.hotmart.com/H106805141N" onclick="return gtag_report_conversion('https://pay.hotmart.com/H106805141N');">Quero começar agora</a>
           <a class="btn btn-ghost" href="#metodo">Conhecer o método 3D</a>
         </div>
       </div>
@@ -1761,7 +1779,7 @@
             <li>Comunidade fechada de gerentes de produto</li>
           </ul>
           <div style="margin-top:12px; display:grid; gap:8px;">
-            <a class="btn btn-primary" href="https://pay.hotmart.com/H106805141N" style="text-align:center;">Quero começar agora</a>
+            <a class="btn btn-primary" href="https://pay.hotmart.com/H106805141N" style="text-align:center;" onclick="return gtag_report_conversion('https://pay.hotmart.com/H106805141N');">Quero começar agora</a>
             <span style="font-size:0.84rem; color:var(--muted);">Pagamento e acesso pela Hotmart</span>
           </div>
           <div class="guarantee"><span class="guarantee-ic" aria-hidden="true">&#10003;</span> Garantia de 7 dias. Se não for para você, devolvemos.</div>
@@ -2036,7 +2054,7 @@
     <section class="final motion-reveal">
       <h2>Recoloque julgamento, contexto e decisão no centro do seu trabalho.</h2>
       <p>Com a IA cuidando do rascunho, sobra o que sempre definiu um bom PM. PM Moderno te dá o método 3D e os quatro artefatos para conduzir isso com critério.</p>
-      <a class="btn btn-primary" href="https://pay.hotmart.com/H106805141N">Quero começar agora</a>
+      <a class="btn btn-primary" href="https://pay.hotmart.com/H106805141N" onclick="return gtag_report_conversion('https://pay.hotmart.com/H106805141N');">Quero começar agora</a>
       <div style="margin-top:10px;"><small>15 aulas, projeto avaliado por rubrica, garantia de 7 dias.</small></div>
     </section>
   </main>
